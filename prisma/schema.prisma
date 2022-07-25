@@ -1,0 +1,38 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+    provider             = "mysql"
+    url                  = env("PLANETSCALE_PRISMA_DATABASE_URL")
+    referentialIntegrity = "prisma"
+}
+
+model User {
+    id       String     @id @default(uuid())
+    name     String
+    email    String     @unique
+    password String
+    forms    FormInfo[]
+}
+
+model FormInfo {
+    id      String @id @default(uuid())
+    name    String
+    fields  String
+    owner   User   @relation(fields: [ownerId], references: [id])
+    ownerId String
+    form    Form[]
+}
+
+model Form {
+    id         String   @id @default(uuid())
+    name       String?
+    email      String?
+    twitter    String?
+    website    String?
+    message    String?  @db.VarChar(1200)
+    formInfo   FormInfo @relation(fields: [formInfoId], references: [id])
+    formInfoId String
+}
