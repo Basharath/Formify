@@ -14,10 +14,10 @@ model User {
     name     String
     email    String     @unique
     password String
-    forms    FormInfo[]
+    forms    Forminfo[]
 }
 
-model FormInfo {
+model Forminfo {
     id      String @id @default(uuid())
     name    String
     fields  String
@@ -33,6 +33,6 @@ model Form {
     twitter    String?
     website    String?
     message    String?  @db.VarChar(1200)
-    formInfo   FormInfo @relation(fields: [formInfoId], references: [id])
-    formInfoId String
+    forminfo   Forminfo @relation(fields: [forminfoId], references: [id])
+    forminfoId String
 }

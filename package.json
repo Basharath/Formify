@@ -1,27 +1,31 @@
 {
-  "name": "nextjs-starter",
+  "name": "feedback-form",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "seed": "node prisma/seed.js"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^3.8.1",
-    "next": "12.0.8",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@prisma/client": "^4.1.0",
+    "next": "12.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.2",
-    "eslint": "8.7.0",
-    "eslint-config-next": "12.0.8",
+    "@types/node": "18.6.1",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.7",
+    "eslint": "8.20.0",
+    "eslint-config-next": "12.2.3",
     "eslint-config-prettier": "^8.5.0",
-    "postcss": "^8.4.5",
+    "postcss": "^8.4.14",
     "prettier": "^2.7.1",
-    "prisma": "^3.8.1",
-    "tailwindcss": "^3.0.15"
+    "prisma": "^4.1.0",
+    "tailwindcss": "^3.1.6",
+    "typescript": "4.7.4"
   }
 }
