@@ -1,11 +1,26 @@
 import Head from 'next/head';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import AuthUser from '../types/AuthUser';
 
-export default function Home() {
+interface LoginProps {
+  user: AuthUser;
+}
+
+export default function Login({ user }: LoginProps) {
   const [input, setInput] = useState({ email: '', password: '', name: '' });
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
+
+  if (process.browser) {
+    if (user) router.push('/dashboard');
+  }
+
+  // useEffect(() => {
+  //   if (user) {
+  //     router.push('/dashboard');
+  //   }
+  // }, [user, router]);
 
   // const data = {
   //   name: 'Mary',
@@ -46,7 +61,7 @@ export default function Home() {
       });
       const result = await res.json();
       if (result.msg === 'OK') {
-        return router.push('/dashboard');
+        location.href = '/dashboard';
       } else {
         console.log('res', result.msg);
       }
@@ -99,7 +114,7 @@ export default function Home() {
             Sign up
           </button>
         </div>
-        <div className="flex flex-col space-y-4 items-center justify-center">
+        <form className="flex flex-col space-y-4 items-center justify-center">
           {!isLogin && (
             <input
               onChange={handleInput}
@@ -136,12 +151,13 @@ export default function Home() {
           ) : (
             <button
               onClick={handleSignup}
+              type="submit"
               className="px-4 py-2 bg-rose-400 hover:bg-rose-500 rounded-lg text-white"
             >
               SignUp
             </button>
           )}
-        </div>
+        </form>
       </main>
 
       <footer></footer>
