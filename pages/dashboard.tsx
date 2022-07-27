@@ -1,7 +1,33 @@
-import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState, useContext, useEffect } from 'react';
+import AuthUser from '../types/AuthUser';
 
-function Dashboard() {
+interface DashboardProps {
+  user: AuthUser;
+}
+
+interface FormType {
+  id: string;
+  name: string;
+  ownerId: string;
+  fields: string;
+}
+
+function Dashboard({ user }: DashboardProps) {
   const [input, setInput] = useState('');
+  const [forms, setForms] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  // console.log('Dash user', user);
+
+  if (process.browser) {
+    if (!user) router.push('/login');
+  }
 
   const createForm = async () => {
     const res = await fetch('/api/forms/manage', {
@@ -9,16 +35,32 @@ function Dashboard() {
       body: JSON.stringify({
         name: input,
         fields: 'name,email,message',
-        ownerId: '2f898856-a05b-4b83-9629-c9235cad76da',
+        ownerId: user.id,
       }),
     });
 
     const result = await res.json();
     console.log('Form create', result);
   };
+
+  const getForms = async () => {
+    const res = await fetch('/api/forms/manage');
+    const result = await res.json();
+    setForms(result.data);
+    console.log('Form manage', result);
+  };
+
+  const handleSignout = async () => {
+    const res = await fetch('/api/users/signout');
+    const result = await res.json();
+
+    if (result.msg === 'OK') location.href = '/login';
+  };
+
   return (
     <div className="flex flex-col justify-center items-center h-full">
       <div>Dashboard</div>
+      <div>Howdy, {user?.name}</div>
       <div className="flex flex-col items-center my-10 space-y-4">
         <label>
           Form name{' '}
@@ -36,9 +78,21 @@ function Dashboard() {
           Create form
         </button>
       </div>
-      <button className="px-4 py-2 bg-rose-400 hover:bg-rose-500 rounded-lg">
-        Delete form
+      <button
+        onClick={getForms}
+        className="px-4 py-2 bg-rose-400 hover:bg-rose-500 rounded-lg"
+      >
+        Get form data
       </button>
+      <button onClick={handleSignout}>Signout</button>
+      <div className="mt-4">
+        {forms.length > 0 &&
+          forms.map((f: FormType) => (
+            <div key={f.id} className="bg-blue-200 my-2 p-1">
+              <Link href={`/form/${f.id}`}>{f.name}</Link>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }
