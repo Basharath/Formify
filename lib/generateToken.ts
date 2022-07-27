@@ -1,16 +1,18 @@
 import jwt from 'jsonwebtoken';
 
 interface TokenDataType {
-  id: String;
-  email: String;
+  id: string;
+  email: string;
+  name: string;
 }
 
-export default function generateToken({ id, email }: TokenDataType) {
+export default function generateToken({ id, email, name }: TokenDataType) {
   const secret: string = <string>process.env.JWT_PRIVATE;
   const token = jwt.sign(
     {
       id,
       email,
+      name,
     },
     secret,
     {
