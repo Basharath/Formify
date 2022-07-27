@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { ChangeEvent, useState, useContext, useEffect } from 'react';
+import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import AuthUser from '../types/AuthUser';
 
@@ -46,7 +46,8 @@ export default function Login({ user }: LoginProps) {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSignin = async () => {
+  const handleSignin = async (e: MouseEvent) => {
+    e.preventDefault();
     if (input.email === '' || input.password === '') return;
 
     const { email, password } = input;
@@ -69,7 +70,8 @@ export default function Login({ user }: LoginProps) {
       console.error('err', err);
     }
   };
-  const handleSignup = async () => {
+  const handleSignup = async (e: MouseEvent) => {
+    e.preventDefault();
     if (input.email === '' || input.password === '' || input.name === '')
       return;
     try {
@@ -144,6 +146,7 @@ export default function Login({ user }: LoginProps) {
           {isLogin ? (
             <button
               onClick={handleSignin}
+              type="submit"
               className="px-4 py-2 bg-rose-400 hover:bg-rose-500 rounded-lg text-white"
             >
               SignIn

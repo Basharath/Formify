@@ -5,7 +5,6 @@ import Joi from 'joi';
 import bcrypt from 'bcryptjs';
 import generateToken from '../../../lib/generateToken';
 import { serialize } from 'cookie';
-import validateAuth from '../../../lib/validateAuth';
 import cookieOptions from '../../../lib/cookieOptions';
 
 export default async function handler(
@@ -38,23 +37,12 @@ export default async function handler(
       const token = generateToken(user);
       res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
 
-      return res.status(201).json({ msg: 'OK' });
+      return res.status(200).json({ msg: 'OK' });
     } catch (err) {
       console.error('err', err);
       return res.status(500).json({ msg: 'Something went wrong' });
     }
   }
-  // if (req.method === 'GET') {
-  //   try {
-  //     const result = await prisma.user.findMany();
-  //     return res.status(200).json({ data: result });
-  //   } catch (err) {
-  //     console.error(err);
-  //     return res.status(500).json({ msg: 'Something went wrong' });
-  //   }
-  // } else {
-  //   return res.status(405).json({ msg: 'Method not allowed' });
-  // }
 }
 
 interface UserType {

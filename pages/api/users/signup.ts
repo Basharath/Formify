@@ -35,17 +35,17 @@ export default async function handler(
       return res.status(500).json({ msg: 'Something went wrong' });
     }
   }
-  if (req.method === 'GET') {
-    try {
-      const result = await prisma.user.findMany();
-      return res.status(200).json({ data: result });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({ msg: 'Something went wrong' });
-    }
-  } else {
-    return res.status(405).json({ msg: 'Method not allowed' });
-  }
+  // if (req.method === 'GET') {
+  //   try {
+  //     const result = await prisma.user.findMany();
+  //     return res.status(200).json({ data: result });
+  //   } catch (err) {
+  //     console.error(err);
+  //     return res.status(500).json({ msg: 'Something went wrong' });
+  //   }
+  // } else {
+  //   return res.status(405).json({ msg: 'Method not allowed' });
+  // }
 }
 
 interface UserType {
