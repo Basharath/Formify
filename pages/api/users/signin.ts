@@ -18,10 +18,7 @@ export default async function handler(
       email,
       password,
     };
-    // console.log('req.cookies', req.cookies);
-    const authRes = validateAuth(req, res);
 
-    console.log('auth', authRes);
     const { error } = validateUser(data);
     if (error) return res.status(400).json({ msg: error.details[0].message });
 
