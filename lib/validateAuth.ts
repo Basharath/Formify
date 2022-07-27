@@ -9,13 +9,13 @@ interface DecodedType {
 export default function validateAuth(
   req: NextApiRequest,
   res: NextApiResponse
-) {
+): AuthResType {
   const { authorization } = req.headers;
   const { token: cookieToken } = req.cookies;
   const authToken = authorization;
 
   if (!authToken && !cookieToken)
-    return res.status(401).json({ msg: 'Access denied. No token provided.' });
+    return { msg: 'Access denied. No token provided.', err: true };
 
   const finalToken = authToken ? authToken : cookieToken ? cookieToken : '';
   try {
@@ -27,4 +27,9 @@ export default function validateAuth(
   } catch (err) {
     return { msg: 'Invalid token', err: true };
   }
+}
+
+export interface AuthResType {
+  msg: DecodedType | string;
+  err: boolean;
 }
