@@ -16,7 +16,7 @@ interface FormType {
 
 function Dashboard({ user }: DashboardProps) {
   const [input, setInput] = useState('');
-  const [forms, setForms] = useState([]);
+  const [forms, setForms] = useState<FormType[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -30,24 +30,30 @@ function Dashboard({ user }: DashboardProps) {
   }
 
   const createForm = async () => {
-    const res = await fetch('/api/forms/manage', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: input,
-        fields: 'name,email,message',
-        ownerId: user.id,
-      }),
-    });
+    try {
+      const res = await fetch('/api/forms/manage', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: input,
+          fields: 'name,email,message',
+          ownerId: user.id,
+        }),
+      });
 
-    const result = await res.json();
-    console.log('Form create', result);
+      const result = await res.json();
+      const newForm = result.data as FormType;
+      setForms((prev) => [...prev, newForm]);
+      setInput('');
+    } catch (err) {
+      console.error('err', err);
+    }
   };
 
   const getForms = async () => {
     const res = await fetch('/api/forms/manage');
     const result = await res.json();
     setForms(result.data);
-    console.log('Form manage', result);
+    // console.log('Form manage', result);
   };
 
   const handleSignout = async () => {
