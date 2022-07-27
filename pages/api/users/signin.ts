@@ -1,6 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import prisma from '../../../lib/prisma.js';
+import prisma from '../../../lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
+import Joi from 'joi';
+import bcrypt from 'bcryptjs';
+import generateToken from '../../../lib/generateToken';
+import { serialize } from 'cookie';
+import validateAuth from '../../../lib/validateAuth';
+import cookieOptions from '../../../lib/cookieOptions';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,20 +14,37 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const { email, password } = JSON.parse(req.body);
+    const data = {
+      email,
+      password,
+    };
+    // console.log('req.cookies', req.cookies);
+    const authRes = validateAuth(req, res);
+
+    console.log('auth', authRes);
+    const { error } = validateUser(data);
+    if (error) return res.status(400).json({ msg: error.details[0].message });
+
     try {
-      const result = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
       });
-      const userPassword = result?.password;
-      if (userPassword === password) {
-        return res.status(200).json({ data: { message: 'OK' } });
-      }
-      return res.status(200).json({ data: { message: 'Failed' } });
+      if (!user)
+        return res.status(404).json({ msg: 'Invalid email or password' });
+
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword)
+        return res.status(400).json({ msg: 'Invalid email or password' });
+
+      const token = generateToken(user);
+      res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+
+      return res.status(201).json({ msg: 'OK' });
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ message: 'Something went wrong' });
+      return res.status(500).json({ msg: 'Something went wrong' });
     }
   }
   // if (req.method === 'GET') {
@@ -36,3 +59,17 @@ export default async function handler(
   //   return res.status(405).json({ msg: 'Method not allowed' });
   // }
 }
+
+interface UserType {
+  email: string;
+  password: string;
+}
+
+const validateUser = (user: UserType) => {
+  const schema = Joi.object({
+    email: Joi.string().email().min(4).max(255).required().label('Email'),
+    password: Joi.string().min(8).max(15).required().label('Password'),
+  });
+
+  return schema.validate(user);
+};
