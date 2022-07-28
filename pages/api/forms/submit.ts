@@ -48,7 +48,8 @@ const allowCors =
     // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader(
       'Access-Control-Allow-Methods',
-      'GET,OPTIONS,PATCH,DELETE,POST,PUT'
+      // 'GET,OPTIONS,PATCH,DELETE,POST,PUT'
+      'POST'
     );
     res.setHeader(
       'Access-Control-Allow-Headers',

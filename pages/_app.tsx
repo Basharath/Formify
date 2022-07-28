@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       const result = await res.json();
       if (!result.err) {
         setUser(result.data);
-        console.log('Inside App', result.data);
+        // console.log('Inside App', result.data);
       }
     } catch (err) {
       console.log('User err', err);

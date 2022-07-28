@@ -82,7 +82,7 @@ export default function Login({ user }: LoginProps) {
       const result = await res.json();
       console.log('signup', result);
       if (result.msg === 'OK') {
-        return router.push('/dashboard');
+        location.href = '/dashboard';
       } else {
         console.log('res', result.msg);
       }

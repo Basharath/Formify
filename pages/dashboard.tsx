@@ -57,10 +57,14 @@ function Dashboard({ user }: DashboardProps) {
   };
 
   const handleSignout = async () => {
-    const res = await fetch('/api/users/signout');
-    const result = await res.json();
+    try {
+      const res = await fetch('/api/users/signout');
+      const result = await res.json();
 
-    if (result.msg === 'OK') location.href = '/login';
+      if (result.msg === 'OK') location.href = '/login';
+    } catch (err) {
+      console.log('err', err);
+    }
   };
 
   return (
