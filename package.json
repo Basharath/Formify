@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "@prisma/client": "^4.1.0",
+    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.5.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "next": "12.2.3",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.3.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
