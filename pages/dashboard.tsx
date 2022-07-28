@@ -58,7 +58,9 @@ function Dashboard({ user }: DashboardProps) {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch('/api/users/signout');
+      const res = await fetch('/api/users/signout', {
+        method: 'POST',
+      });
       const result = await res.json();
 
       if (result.msg === 'OK') location.href = '/login';
