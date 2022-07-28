@@ -34,23 +34,40 @@ export default async function handler(
       return res.status(500).json({ msg: 'Something went wrong', err: true });
     }
   }
-  if (req.method === 'GET') {
+  if (req.method === 'PUT') {
     const formId = req.query.id as string;
 
-    if (formId) {
-      try {
-        const result = await prisma.form.findMany({
-          where: {
-            forminfoId: formId,
-          },
-        });
-        return res.status(200).json({ data: result, err: false });
-      } catch (err) {
-        console.error(err);
-        return res.status(500).json({ msg: 'Something went wrong' });
-      }
-    }
+    const { name, fields, ownerId } = JSON.parse(req.body);
+    const data = {
+      name,
+      fields,
+      ownerId,
+    };
 
+    try {
+      const result = await prisma.forminfo.update({
+        where: { id: formId },
+        data,
+      });
+      return res.status(200).json({ data: result, err: false });
+    } catch (err) {
+      console.error('err', err);
+      return res.status(500).json({ msg: 'Something went wrong', err: true });
+    }
+  }
+  if (req.method === 'DELETE') {
+    const formId = req.query.id as string;
+    try {
+      const result = await prisma.forminfo.delete({
+        where: { id: formId },
+      });
+      return res.status(200).json({ data: result, err: false });
+    } catch (err) {
+      console.error('err', err);
+      return res.status(500).json({ msg: 'Something went wrong', err: true });
+    }
+  }
+  if (req.method === 'GET') {
     if (typeof authData === 'string') return;
     try {
       const result = await prisma.forminfo.findMany({
@@ -63,7 +80,7 @@ export default async function handler(
       console.error(err);
       return res.status(500).json({ msg: 'Something went wrong' });
     }
-  } else {
-    return res.status(405).json({ msg: 'Method not allowed' });
   }
+
+  return res.status(405).json({ msg: 'Method not allowed' });
 }

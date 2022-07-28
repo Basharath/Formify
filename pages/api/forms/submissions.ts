@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import prisma from '../../../lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
+import validateAuth from '../../../lib/validateAuth';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { form } = req.query;
+    const { id } = req.query;
     const { name, email, twitter, website, message } = req.body;
     const data = {
       ...(name && { name }),
@@ -12,9 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       ...(twitter && { twitter }),
       ...(website && { website }),
       ...(message && { message }),
-      forminfoId: form,
+      forminfoId: id,
     };
-    console.log('form', data);
+    // console.log('form', data);
     try {
       const result = await prisma.form.create({
         data,
@@ -25,18 +26,46 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(500).json({ msg: 'Something went wrong' });
     }
   }
-  // if (req.method === 'GET') {
-  //   try {
-  //     const result = await prisma.form.findMany();
-  //     return res.status(200).json({ data: result });
-  //   } catch (err) {
-  //     console.error(err);
-  //     return res.status(500).json({ msg: 'Something went wrong' });
-  //   }
-  // }
-  else {
-    return res.status(405).json({ msg: 'Method not allowed' });
+
+  const { msg: authData, err: authError } = validateAuth(req, res);
+
+  if (authError) {
+    let statusCode = 401;
+    if (authData === 'Invalid token') statusCode = 400;
+    return res.status(statusCode).json({ msg: authData, err: true });
   }
+
+  if (req.method === 'GET') {
+    const useFormId = req.query.id as string;
+
+    if (useFormId) {
+      try {
+        const result = await prisma.form.findMany({
+          where: {
+            forminfoId: useFormId,
+          },
+        });
+        return res.status(200).json({ data: result, err: false });
+      } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: 'Something went wrong' });
+      }
+    }
+  }
+  if (req.method === 'DELETE') {
+    const submissionId = req.query.id as string;
+    try {
+      const result = await prisma.form.delete({
+        where: { id: submissionId },
+      });
+      return res.status(200).json({ data: result, err: false });
+    } catch (err) {
+      console.error('err', err);
+      return res.status(500).json({ msg: 'Something went wrong', err: true });
+    }
+  }
+
+  return res.status(405).json({ msg: 'Method not allowed' });
 }
 
 const allowCors =
