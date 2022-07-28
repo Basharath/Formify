@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { UserType } from '../types';
+import { signin, signout, signup } from '../http';
+import toast from 'react-hot-toast';
 
 interface LoginProps {
   user: UserType;
@@ -15,32 +17,6 @@ export default function Login({ user }: LoginProps) {
   if (process.browser) {
     if (user) router.push('/dashboard');
   }
-
-  // useEffect(() => {
-  //   if (user) {
-  //     router.push('/dashboard');
-  //   }
-  // }, [user, router]);
-
-  // const data = {
-  //   name: 'Mary',
-  //   email: 'Mary@gmail.com',
-  //   password: '12345678',
-  // };
-  // const createUser = async () => {
-  //   const res = await fetch('/api/users', {
-  //     method: 'POST',
-  //     body: JSON.stringify(data),
-  //   });
-  //   const result = await res.json();
-  //   console.log('POST', result);
-  // };
-
-  // const getUsers = async () => {
-  //   const res = await fetch('/api/users');
-  //   const result = await res.json();
-  //   console.log('GET', result);
-  // };
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -56,18 +32,11 @@ export default function Login({ user }: LoginProps) {
       password,
     };
     try {
-      const res = await fetch('/api/users/signin', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-      const result = await res.json();
-      if (result.msg === 'OK') {
-        location.href = '/dashboard';
-      } else {
-        console.log('res', result.msg);
-      }
-    } catch (err) {
-      console.error('err', err);
+      const result = await signin(data);
+      if (result.data) location.href = '/dashboard';
+    } catch (err: any) {
+      console.error('signin', err);
+      toast.error(err?.response?.data);
     }
   };
   const handleSignup = async (e: MouseEvent) => {
@@ -75,19 +44,13 @@ export default function Login({ user }: LoginProps) {
     if (input.email === '' || input.password === '' || input.name === '')
       return;
     try {
-      const res = await fetch('/api/users/signup', {
-        method: 'POST',
-        body: JSON.stringify(input),
-      });
-      const result = await res.json();
-      console.log('signup', result);
-      if (result.msg === 'OK') {
+      const result = await signup(input);
+      if (result.data) {
         location.href = '/dashboard';
-      } else {
-        console.log('res', result.msg);
       }
-    } catch (err) {
-      console.error('err', err);
+    } catch (err: any) {
+      console.error('signup', err);
+      toast.error(err?.response?.data);
     }
   };
 

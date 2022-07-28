@@ -12,7 +12,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const { email, password } = JSON.parse(req.body);
+    const { email, password } = req.body;
     const data = {
       email,
       password,

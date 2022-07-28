@@ -2,6 +2,8 @@ import Router, { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { UserType, FormSubmissionType } from '../../types';
 import Link from 'next/link';
+import { getFormSubmissions } from '../../http';
+import toast from 'react-hot-toast';
 
 interface FormProps {
   user: UserType;
@@ -18,16 +20,16 @@ function Form({ user }: FormProps) {
   }, [isReady, user]);
 
   useEffect(() => {
-    if (formId) getForm(formId);
+    if (formId) getForms(formId);
   }, [formId]);
 
-  const getForm = async (id: string) => {
+  const getForms = async (id: string) => {
     try {
-      const res = await fetch(`/api/forms/manage?id=${id}`);
-      const result = await res.json();
+      const result = await getFormSubmissions(id);
       setSubmissions(result.data);
-    } catch (err) {
+    } catch (err: any) {
       console.log('err', err);
+      toast.error(err?.response?.data);
     }
     // console.log('Form manage', result);
   };

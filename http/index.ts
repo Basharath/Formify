@@ -1,10 +1,11 @@
-import axios, { AxiosRequestHeaders } from 'axios';
+import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 import {
   UserSigninType,
   UserFormType,
   UserSignupType,
   FormSubmissionType,
+  UserType,
 } from '../types';
 
 const baseURL = '/api';
@@ -29,7 +30,7 @@ API.interceptors.response.use(
       error.response.status < 500;
 
     if (!expectedError) {
-      toast.error('An unexpected error occurred');
+      return toast.error('An unexpected error occurred');
     }
     return Promise.reject(error);
   }
@@ -38,13 +39,13 @@ API.interceptors.response.use(
 const forms = '/forms';
 const usersUrl = '/users';
 
-export const getUserForms = () => API.get(`${forms}/manage`);
+export const getUserForms = () => API.get(`${forms}/userforms`);
 export const createUserForm = (newForm: UserFormType) =>
-  API.post(forms, newForm);
+  API.post(`${forms}/userforms`, newForm);
 export const updateUserForm = (id: string, formData: UserFormType) =>
-  API.put(`${forms}/manage?${id}`, formData);
+  API.put(`${forms}/userforms?${id}`, formData);
 export const deleteUserForm = (id: string) =>
-  API.delete(`${forms}/manage?${id}`);
+  API.delete(`${forms}/userforms?${id}`);
 
 export const getFormSubmissions = (userFormId: string) =>
   API.get(`${forms}/submissions?id=${userFormId}`);

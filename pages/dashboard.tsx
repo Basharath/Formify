@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { UserFormType, UserType } from '../types';
 import toast from 'react-hot-toast';
+import { createUserForm, getUserForms, signout } from '../http';
 
 interface DashboardProps {
   user: UserType;
@@ -19,7 +20,6 @@ function Dashboard({ user }: DashboardProps) {
 
   useEffect(() => {
     getForms();
-    toast.success('Hi, from toast');
   }, []);
 
   // console.log('Dash user', user);
@@ -29,42 +29,39 @@ function Dashboard({ user }: DashboardProps) {
   }
 
   const createForm = async () => {
+    const formData = {
+      name: input,
+      fields: 'name,email,message',
+      ownerId: user.id,
+    };
     try {
-      const res = await fetch('/api/forms/manage', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: input,
-          fields: 'name,email,message',
-          ownerId: user.id,
-        }),
-      });
-
-      const result = await res.json();
+      const result = await createUserForm(formData);
       const newForm = result.data as FormType;
       setForms((prev) => [...prev, newForm]);
       setInput('');
-    } catch (err) {
-      console.error('err', err);
+    } catch (err: any) {
+      toast.error(err?.response?.data);
+      // console.error('err', err);
     }
   };
 
   const getForms = async () => {
-    const res = await fetch('/api/forms/manage');
-    const result = await res.json();
-    setForms(result.data);
+    try {
+      const res = await getUserForms();
+      setForms(res.data);
+    } catch (err: any) {
+      toast.error(err?.response?.data);
+    }
     // console.log('Form manage', result);
   };
 
   const handleSignout = async () => {
     try {
-      const res = await fetch('/api/users/signout', {
-        method: 'POST',
-      });
-      const result = await res.json();
-
-      if (result.msg === 'OK') location.href = '/login';
-    } catch (err) {
-      console.log('err', err);
+      const res = await signout();
+      if (res.data) location.href = '/login';
+    } catch (err: any) {
+      toast.error(err?.response?.data);
+      // console.log('err', err);
     }
   };
 
@@ -89,12 +86,12 @@ function Dashboard({ user }: DashboardProps) {
           Create form
         </button>
       </div>
-      <button
-        onClick={getForms}
+      {/* <button
+        // onClick={getForms}
         className="px-4 py-2 bg-rose-400 hover:bg-rose-500 rounded-lg"
       >
         Get form data
-      </button>
+      </button> */}
       <button onClick={handleSignout}>Signout</button>
       <div className="mt-4">
         {forms.length > 0 &&

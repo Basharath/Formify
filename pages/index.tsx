@@ -3,13 +3,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
-  const getUser = async () => {
-    const res = await fetch('/api/users');
-    const result = await res.json();
-
-    console.log('User data', result);
-  };
-
   return (
     <div>
       <Head>
@@ -22,7 +15,6 @@ export default function Home() {
         <div className="flex flex-col space-y-4 items-center justify-center">
           <Link href="/login">Login</Link>
         </div>
-        <button onClick={getUser}>Get user data</button>
         <Link href={'/form'}>Go to Form</Link>
         <Link href={'/dashboard'}>Dashboard</Link>
       </main>

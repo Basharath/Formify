@@ -16,7 +16,7 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
-    const { name, fields, ownerId } = JSON.parse(req.body);
+    const { name, fields, ownerId } = req.body;
     const data = {
       name,
       fields,
@@ -36,7 +36,7 @@ export default async function handler(
   if (req.method === 'PUT') {
     const formId = req.query.id as string;
 
-    const { name, fields, ownerId } = JSON.parse(req.body);
+    const { name, fields, ownerId } = req.body;
     const data = {
       name,
       fields,

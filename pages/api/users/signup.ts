@@ -6,13 +6,14 @@ import generateToken from '../../../lib/generateToken';
 import { serialize } from 'cookie';
 import bcrypt from 'bcryptjs';
 import cookieOptions from '../../../lib/cookieOptions';
+import { Prisma } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const { name, email, password } = JSON.parse(req.body);
+    const { name, email, password } = req.body;
     const data = {
       name,
       email,
@@ -22,6 +23,7 @@ export default async function handler(
     if (error) return res.status(400).send(error.details[0].message);
     try {
       data.password = await bcrypt.hash(password, 12);
+
       const result = await prisma.user.create({
         data,
       });
@@ -31,7 +33,12 @@ export default async function handler(
       res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
       return res.status(201).send('Signed up successfully');
     } catch (err) {
-      console.error('err', err);
+      console.log('err', err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2002') {
+          return res.status(400).send('User exists already');
+        }
+      }
       return res.status(500).send('Something went wrong');
     }
   }
@@ -52,3 +59,6 @@ const validateUser = (user: UserType) => {
 
   return schema.validate(user);
 };
+function err(arg0: string, err: any) {
+  throw new Error('Function not implemented.');
+}
