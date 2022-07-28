@@ -7,13 +7,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // console.log('cookies', req.cookies);
   const { msg: authData, err: authError } = validateAuth(req, res);
 
   if (authError) {
     let statusCode = 401;
     if (authData === 'Invalid token') statusCode = 400;
-    return res.status(statusCode).json({ msg: authData, err: true });
+    return res.status(statusCode).send(authData);
   }
 
   if (req.method === 'POST') {
@@ -28,10 +27,10 @@ export default async function handler(
       const result = await prisma.forminfo.create({
         data,
       });
-      return res.status(200).json({ data: result, err: false });
+      return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong', err: true });
+      return res.status(500).send('Something went wrong');
     }
   }
   if (req.method === 'PUT') {
@@ -49,10 +48,10 @@ export default async function handler(
         where: { id: formId },
         data,
       });
-      return res.status(200).json({ data: result, err: false });
+      return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong', err: true });
+      return res.status(500).send('Something went wrong');
     }
   }
   if (req.method === 'DELETE') {
@@ -61,10 +60,10 @@ export default async function handler(
       const result = await prisma.forminfo.delete({
         where: { id: formId },
       });
-      return res.status(200).json({ data: result, err: false });
+      return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong', err: true });
+      return res.status(500).send('Something went wrong');
     }
   }
   if (req.method === 'GET') {
@@ -75,12 +74,12 @@ export default async function handler(
           ownerId: authData.id,
         },
       });
-      return res.status(200).json({ data: result, err: false });
+      return res.status(200).send(result);
     } catch (err) {
       console.error(err);
-      return res.status(500).json({ msg: 'Something went wrong' });
+      return res.status(500).send('Something went wrong');
     }
   }
 
-  return res.status(405).json({ msg: 'Method not allowed' });
+  return res.status(405).send('Method not allowed');
 }

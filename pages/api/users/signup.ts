@@ -19,7 +19,7 @@ export default async function handler(
       password,
     };
     const { error } = validateUser(data);
-    if (error) return res.status(400).json({ msg: error.details[0].message });
+    if (error) return res.status(400).send(error.details[0].message);
     try {
       data.password = await bcrypt.hash(password, 12);
       const result = await prisma.user.create({
@@ -29,23 +29,12 @@ export default async function handler(
       const token = generateToken(result);
 
       res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
-      return res.status(201).json({ msg: 'OK' });
+      return res.status(201).send('Signed up successfully');
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong' });
+      return res.status(500).send('Something went wrong');
     }
   }
-  // if (req.method === 'GET') {
-  //   try {
-  //     const result = await prisma.user.findMany();
-  //     return res.status(200).json({ data: result });
-  //   } catch (err) {
-  //     console.error(err);
-  //     return res.status(500).json({ msg: 'Something went wrong' });
-  //   }
-  // } else {
-  //   return res.status(405).json({ msg: 'Method not allowed' });
-  // }
 }
 
 interface UserType {

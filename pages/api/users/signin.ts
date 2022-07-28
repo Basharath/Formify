@@ -19,7 +19,7 @@ export default async function handler(
     };
 
     const { error } = validateUser(data);
-    if (error) return res.status(400).json({ msg: error.details[0].message });
+    if (error) return res.status(400).send(error.details[0].message);
 
     try {
       const user = await prisma.user.findUnique({
@@ -27,20 +27,19 @@ export default async function handler(
           email,
         },
       });
-      if (!user)
-        return res.status(404).json({ msg: 'Invalid email or password' });
+      if (!user) return res.status(404).send('Invalid email or password');
 
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword)
-        return res.status(400).json({ msg: 'Invalid email or password' });
+        return res.status(400).send('Invalid email or password');
 
       const token = generateToken(user);
       res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
 
-      return res.status(200).json({ msg: 'OK' });
+      return res.status(200).send('Signin successful');
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong' });
+      return res.status(500).send('Something went wrong');
     }
   }
 }

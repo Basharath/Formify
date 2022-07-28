@@ -8,15 +8,15 @@ export default async function user(req: NextApiRequest, res: NextApiResponse) {
   if (authError) {
     let statusCode = 401;
     if (authData === 'Invalid token') statusCode = 400;
-    return res.status(statusCode).json({ msg: authData, err: true });
+    return res.status(statusCode).send(authData);
   }
 
   if (req.method === 'GET') {
     // For type narrowing TS
     if (typeof authData === 'string') return;
 
-    return res.status(200).json({ data: authData, err: false });
+    return res.status(200).send(authData);
   } else {
-    return res.status(405).json({ msg: 'Method not allowed' });
+    return res.status(405).send('Method not allowed');
   }
 }

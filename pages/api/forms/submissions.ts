@@ -20,10 +20,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const result = await prisma.form.create({
         data,
       });
-      return res.status(200).json({ data: result });
+      return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong' });
+      return res.status(500).send('Something went wrong');
     }
   }
 
@@ -32,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (authError) {
     let statusCode = 401;
     if (authData === 'Invalid token') statusCode = 400;
-    return res.status(statusCode).json({ msg: authData, err: true });
+    return res.status(statusCode).send(authData);
   }
 
   if (req.method === 'GET') {
@@ -45,10 +45,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             forminfoId: useFormId,
           },
         });
-        return res.status(200).json({ data: result, err: false });
+        return res.status(200).send(result);
       } catch (err) {
         console.error(err);
-        return res.status(500).json({ msg: 'Something went wrong' });
+        return res.status(500).send('Something went wrong');
       }
     }
   }
@@ -58,14 +58,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const result = await prisma.form.delete({
         where: { id: submissionId },
       });
-      return res.status(200).json({ data: result, err: false });
+      return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
-      return res.status(500).json({ msg: 'Something went wrong', err: true });
+      return res.status(500).send('Something went wrong');
     }
   }
 
-  return res.status(405).json({ msg: 'Method not allowed' });
+  return res.status(405).send('Method not allowed');
 }
 
 const allowCors =
