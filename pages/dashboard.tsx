@@ -1,17 +1,15 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState, useContext, useEffect } from 'react';
-import AuthUser from '../types/AuthUser';
+import React, { useState, useEffect } from 'react';
+import { UserFormType, UserType } from '../types';
+import toast from 'react-hot-toast';
 
 interface DashboardProps {
-  user: AuthUser;
+  user: UserType;
 }
 
-interface FormType {
+interface FormType extends UserFormType {
   id: string;
-  name: string;
-  ownerId: string;
-  fields: string;
 }
 
 function Dashboard({ user }: DashboardProps) {
@@ -21,6 +19,7 @@ function Dashboard({ user }: DashboardProps) {
 
   useEffect(() => {
     getForms();
+    toast.success('Hi, from toast');
   }, []);
 
   // console.log('Dash user', user);

@@ -1,20 +1,10 @@
 import Router, { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-import UserAuth from '../../types/AuthUser';
+import { UserType, FormSubmissionType } from '../../types';
 import Link from 'next/link';
 
 interface FormProps {
-  user: UserAuth;
-}
-
-interface SubmissionType {
-  id: string;
-  name: string | null;
-  email: string | null;
-  twitter: string | null;
-  website: string | null;
-  message: string | null;
-  forminfoId: string;
+  user: UserType;
 }
 
 function Form({ user }: FormProps) {
@@ -47,7 +37,7 @@ function Form({ user }: FormProps) {
       <h1 className="text-5xl">Submissions</h1>
       <div className="my-4">
         {submissions.length > 0 &&
-          submissions.map((s: SubmissionType) => (
+          submissions.map((s: FormSubmissionType) => (
             <div key={s.id} className="flex space-x-4">
               <div>{s.id}</div>
               <div>{s.name}</div>
@@ -71,7 +61,7 @@ export default Form;
 //   user: UserAuth;
 // }
 
-// interface SubmissionType {
+// interface FormSubmissionType {
 //   id: string;
 //   name: string | null;
 //   email: string | null;

@@ -1,10 +1,11 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import React, { useEffect, useState } from 'react';
-import AuthUser from '../types/AuthUser';
+import { UserType } from '../types';
+import { Toaster } from 'react-hot-toast';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
   const getUser = async () => {
     try {
@@ -14,7 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       const result = await res.json();
       if (!result.err) {
         setUser(result.data);
-        // console.log('Inside App', result.data);
       }
     } catch (err) {
       console.log('User err', err);
@@ -26,9 +26,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    // <UserContext.Provider value={user}>
-    <Component {...pageProps} user={user} />
-    // </UserContext.Provider>
+    <>
+      <Toaster position="bottom-center" reverseOrder={false} />
+      <Component {...pageProps} user={user} />
+    </>
   );
 }
 

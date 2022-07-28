@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useRouter } from 'next/router';
-import AuthUser from '../types/AuthUser';
+import { UserType } from '../types';
 
 interface LoginProps {
-  user: AuthUser;
+  user: UserType;
 }
 
 export default function Login({ user }: LoginProps) {
