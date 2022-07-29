@@ -25,6 +25,15 @@ export interface UserSignupType extends UserSigninType {
 
 export interface UserFormType {
   name: string;
+  displayName: string;
   ownerId: string;
   fields: string;
+}
+
+export interface FieldsObjType {
+  name: boolean;
+  email: boolean;
+  website: boolean;
+  twitter: boolean;
+  message: boolean;
 }
