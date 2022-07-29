@@ -18,12 +18,15 @@ model User {
 }
 
 model Forminfo {
-    id      String @id @default(uuid())
-    name    String
-    fields  String
-    owner   User   @relation(fields: [ownerId], references: [id])
-    ownerId String
-    form    Form[]
+    id          String   @id @default(uuid())
+    name        String
+    displayName String?
+    fields      String
+    owner       User     @relation(fields: [ownerId], references: [id])
+    ownerId     String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    form        Form[]
 }
 
 model Form {
@@ -33,6 +36,7 @@ model Form {
     twitter    String?
     website    String?
     message    String?  @db.VarChar(1200)
+    updatedAt  DateTime @updatedAt
     forminfo   Forminfo @relation(fields: [forminfoId], references: [id])
     forminfoId String
 }
