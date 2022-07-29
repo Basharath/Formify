@@ -1,29 +1,21 @@
 import Head from 'next/head';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { UserType } from '../types';
+import { ChangeEvent, MouseEvent, useState } from 'react';
 import { signin, signout, signup } from '../http';
 import toast from 'react-hot-toast';
 import Input from '../components/Input';
 import LoginBtn from '../components/LoginBtn';
 import { AxiosError } from 'axios';
+import { GetServerSideProps } from 'next';
+import cookie from 'cookie';
 
-interface LoginProps {
-  user: UserType;
-}
+// interface LoginProps {
+//   user: UserType;
+// }
+// { user }: LoginProps
 
-export default function Login({ user }: LoginProps) {
+export default function Login() {
   const [input, setInput] = useState({ email: '', password: '', name: '' });
   const [isLogin, setIsLogin] = useState(true);
-  const router = useRouter();
-
-  if (process.browser) {
-    if (user) router.push('/dashboard');
-  }
-  // useEffect(() => {
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -45,7 +37,7 @@ export default function Login({ user }: LoginProps) {
       const result = await signin(data);
       if (result.data) location.href = '/dashboard';
     } catch (err) {
-      console.error('signin', err);
+      // console.error('signin', err);
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
@@ -63,7 +55,7 @@ export default function Login({ user }: LoginProps) {
         location.href = '/dashboard';
       }
     } catch (err) {
-      console.error('signup', err);
+      // console.error('signup', err);
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
@@ -138,3 +130,52 @@ export default function Login({ user }: LoginProps) {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const cookie = ctx.req ? ctx.req.headers.cookie : undefined;
+  const cookieString: string | undefined = ctx.req.headers.cookie;
+
+  let cookieData;
+  if (cookieString) cookieData = cookie.parse(cookieString);
+
+  const baseURL =
+    process.env.NODE_ENV === 'production'
+      ? process.env.SERVER
+      : 'http://localhost:3000';
+
+  const userURL = `${baseURL}/api/users/getuser`;
+
+  if (cookieData?.token) {
+    try {
+      const userRes = await fetch(userURL, {
+        method: 'GET',
+        headers: {
+          Authorization: `${cookieData.token}`,
+        },
+      });
+
+      const result = await userRes.json();
+
+      if (result.id) {
+        return {
+          redirect: {
+            destination: '/dashboard',
+            permanent: false,
+          },
+        };
+      } else {
+        return {
+          props: { data: '' },
+        };
+      }
+    } catch (err) {
+      return {
+        props: { data: '' },
+      };
+    }
+  }
+
+  return {
+    props: { data: '' },
+  };
+};

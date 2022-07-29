@@ -1,22 +1,24 @@
-import Link from 'next/link';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useState, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { UserFormType, UserType } from '../types';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { createUserForm, getUserForms, signout } from '../http';
 import { AxiosError } from 'axios';
 import UserFormItem from '../components/UserFormItem';
 import FormMenubar from '../components/FormMenubar';
 import { generateFieldsString, parseFieldNames } from '../utils';
 import FormModal from '../components/FormModal';
-
-interface DashboardProps {
-  user: UserType;
-}
+import Layout from '../components/Layout';
+import { GetServerSideProps } from 'next';
+import cookie from 'cookie';
 
 interface FormType extends UserFormType {
   id: string;
+}
+
+interface DashboardProps {
+  userForms: FormType[];
+  user: UserType;
 }
 
 const initialFormInputs = {
@@ -32,22 +34,11 @@ const initialFormCheckboxes = {
   message: false,
 };
 
-function Dashboard({ user }: DashboardProps) {
+function Dashboard({ userForms, user }: DashboardProps) {
   const [formInputs, setFormInputs] = useState(initialFormInputs);
   const [formCheckboxes, setFormCheckboxes] = useState(initialFormCheckboxes);
-  const [forms, setForms] = useState<FormType[]>([]);
+  const [forms, setForms] = useState<FormType[]>(userForms);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    getForms();
-  }, []);
-
-  // console.log('Dash user', user);
-
-  if (process.browser) {
-    if (!user) router.push('/login');
-  }
 
   const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
     setFormInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -87,17 +78,17 @@ function Dashboard({ user }: DashboardProps) {
     }
   };
 
-  const getForms = async () => {
-    try {
-      const res = await getUserForms();
-      setForms(res.data);
-    } catch (err) {
-      // if (err instanceof AxiosError) {
-      //   toast.error(err?.response?.data);
-      // }
-    }
-    // console.log('Form manage', result);
-  };
+  // const getForms = async () => {
+  //   try {
+  //     const res = await getUserForms();
+  //     setForms(res.data);
+  //   } catch (err) {
+  //     // if (err instanceof AxiosError) {
+  //     //   toast.error(err?.response?.data);
+  //     // }
+  //   }
+  //   // console.log('Form manage', result);
+  // };
 
   const handleSignout = async () => {
     try {
@@ -128,7 +119,6 @@ function Dashboard({ user }: DashboardProps) {
 
   const closeModal = () => setIsModalOpen(false);
 
-  // console.log('check', formCheckboxes);
   return (
     <>
       <Head>
@@ -203,7 +193,7 @@ function Dashboard({ user }: DashboardProps) {
           </div>
 
           <div className="bg-gray-50 h-[65vh] md:h-[420px] mb-8 rounded-xl overflow-auto">
-            {forms.map((f) => (
+            {forms?.map((f) => (
               <UserFormItem
                 key={f.id}
                 name={f.name}
@@ -233,3 +223,73 @@ function Dashboard({ user }: DashboardProps) {
 }
 
 export default Dashboard;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const cookie = ctx.req ? ctx.req.headers.cookie : undefined;
+  const cookieString: string | undefined = ctx.req.headers.cookie;
+
+  let cookieData;
+  if (cookieString) cookieData = cookie.parse(cookieString);
+
+  const baseURL =
+    process.env.NODE_ENV === 'production'
+      ? process.env.SERVER
+      : 'http://localhost:3000';
+
+  const userURL = `${baseURL}/api/users/getuser`;
+  const formsURL = `${baseURL}/api/forms/userforms`;
+
+  let userData;
+
+  if (cookieData?.token) {
+    try {
+      const userRes = await fetch(userURL, {
+        method: 'GET',
+        headers: {
+          Authorization: `${cookieData.token}`,
+        },
+      });
+
+      const result = await userRes.json();
+      userData = result;
+
+      if (!result.id) {
+        return {
+          redirect: {
+            destination: '/login',
+            permanent: false,
+          },
+        };
+      }
+    } catch (err) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  try {
+    const userForms = await fetch(formsURL, {
+      method: 'GET',
+      headers: {
+        Authorization: `${cookieData?.token}`,
+      },
+    });
+
+    const result = await userForms.json();
+
+    return {
+      props: { userForms: result, user: userData },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+};
