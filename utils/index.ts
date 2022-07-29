@@ -20,3 +20,10 @@ export const generateFieldsString = (fieldsObj: FieldsObjType) => {
     .reduce((a: string, c) => (a += fieldsObj[c] ? c + ',' : ''), '')
     .slice(0, -1); // Slice to remove comma at the end
 };
+
+export const generateFieldsObject = (fieldsString: string) => {
+  return fieldsString
+    .split(',')
+    .filter((f) => f)
+    .reduce((a, c) => ({ ...a, [c]: true }), {});
+};

@@ -30,6 +30,10 @@ export interface UserFormType {
   fields: string;
 }
 
+export interface UserFormTypeWithId extends UserFormType {
+  id: string;
+}
+
 export interface FieldsObjType {
   name: boolean;
   email: boolean;

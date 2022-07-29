@@ -6,6 +6,7 @@ import { FieldsObjType } from '../types';
 interface FormInputsType {
   name: string;
   displayName: string;
+  id: string;
 }
 
 interface FormModalType {
@@ -13,8 +14,9 @@ interface FormModalType {
   checkboxesState: FieldsObjType;
   onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onCheckboxChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: () => void;
+  onSubmit: (id: string) => void;
   closeModal: () => void;
+  editMode: boolean;
 }
 
 function FormModal({
@@ -24,6 +26,7 @@ function FormModal({
   onCheckboxChange,
   onSubmit,
   closeModal,
+  editMode,
 }: FormModalType) {
   const handlePropagation = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -38,7 +41,7 @@ function FormModal({
         onClick={handlePropagation}
       >
         <h3 className="text-2xl font-semibold text-center mb-4">
-          Create new form
+          {editMode ? 'Update the form' : 'Create new form'}
         </h3>
         <div>
           <label className="font-medium">Enter form name</label>
@@ -117,10 +120,10 @@ function FormModal({
         </div>
         <div>
           <button
-            onClick={onSubmit}
+            onClick={() => onSubmit(inputsState.id)}
             className="px-4 py-2 bg-purple-500/80 hover:bg-purple-500 rounded-lg text-white w-full focus:outline-none"
           >
-            Create form
+            {editMode ? 'Update form' : 'Create form'}
           </button>
         </div>
       </div>

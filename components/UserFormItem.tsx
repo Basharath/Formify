@@ -1,30 +1,32 @@
 import Link from 'next/link';
 import { MouseEvent } from 'react';
+import { UserFormTypeWithId } from '../types';
+import { parseFieldNames } from '../utils';
 
 interface UserFormItemType {
-  name: string;
-  fields: string[];
+  formDetails: UserFormTypeWithId;
   onScriptClick: (e: MouseEvent<HTMLElement>) => void;
-  onEditClick: (e: MouseEvent<HTMLElement>) => void;
-  onDeleteClick: (e: MouseEvent<HTMLElement>) => void;
-  formId: string;
+  onEditClick: (
+    e: MouseEvent<HTMLElement>,
+    formDetails: UserFormTypeWithId
+  ) => void;
+  onDeleteClick: (e: MouseEvent<HTMLElement>, id: string) => void;
 }
 
 function UserFormItem({
-  name,
-  fields,
   onScriptClick,
   onEditClick,
   onDeleteClick,
-  formId,
-}: // key,
-UserFormItemType) {
+  formDetails,
+}: UserFormItemType) {
+  const { name, fields, id: formId } = formDetails;
+
   return (
     <Link href={`/form/${formId}`}>
       <div className="w-auto flex justify-evenly items-center p-4 py-5 min-w-[700px] bg-blue-50 hover:bg-blue-100 cursor-pointer border-b last:border-b-0">
         <div className="w-3/12 font-medium">{name}</div>
         <div className="w-3/12 flex flex-wrap md:flex-nowrap">
-          {fields.map((f, idx) => (
+          {parseFieldNames(fields).map((f, idx) => (
             <span
               key={idx}
               className="px-1 py-[2px] mr-1 rounded-md bg-blue-200 text-sm mb-1 md:mb-0"
@@ -54,7 +56,7 @@ UserFormItemType) {
         </div>
         <div
           className="w-2/12 grid place-content-center group"
-          onClick={onEditClick}
+          onClick={(e: MouseEvent<HTMLElement>) => onEditClick(e, formDetails)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +75,7 @@ UserFormItemType) {
         </div>
         <div
           className="w-2/12 grid place-content-center pl-10 group"
-          onClick={onDeleteClick}
+          onClick={(e) => onDeleteClick(e, formId)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
