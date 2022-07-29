@@ -227,7 +227,7 @@ function formifyInit(fields, url, heading = 'Contact/Feedback') {
           body: JSON.stringify(formData),
         });
         const result = await res.json();
-        if (result.data) {
+        if (result) {
           formLoader.style.cssText = formLoaderCSS;
           notify('success', 'Successfully submitted');
           const formifyInputs = document.querySelectorAll('.formify-input');
