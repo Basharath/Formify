@@ -12,13 +12,14 @@ export default async function handler(
   if (authError) {
     let statusCode = 401;
     if (authData === 'Invalid token') statusCode = 400;
-    return res.status(statusCode).send(authData);
+    return res.status(statusCode).send('Please signin to access content.');
   }
 
   if (req.method === 'POST') {
-    const { name, fields, ownerId } = req.body;
+    const { name, displayName, fields, ownerId } = req.body;
     const data = {
       name,
+      displayName,
       fields,
       ownerId,
     };
@@ -36,9 +37,10 @@ export default async function handler(
   if (req.method === 'PUT') {
     const formId = req.query.id as string;
 
-    const { name, fields, ownerId } = req.body;
+    const { name, displayName, fields, ownerId } = req.body;
     const data = {
       name,
+      displayName,
       fields,
       ownerId,
     };
