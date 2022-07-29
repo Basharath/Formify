@@ -13,9 +13,10 @@ import { AxiosError } from 'axios';
 import UserFormItem from '../components/UserFormItem';
 import FormMenubar from '../components/FormMenubar';
 import {
+  copyToClipboard,
+  fieldsToArray,
   generateFieldsObject,
   generateFieldsString,
-  parseFieldNames,
 } from '../utils';
 import FormModal from '../components/FormModal';
 import { GetServerSideProps } from 'next';
@@ -106,9 +107,29 @@ function Dashboard({ userForms, user }: DashboardProps) {
     }
   };
 
-  const handleScript = (e: MouseEvent<HTMLElement>) => {
+  const handleScript = async (
+    e: MouseEvent<HTMLElement>,
+    formDetails: UserFormTypeWithId
+  ) => {
     e.stopPropagation();
-    console.log('Click on Script');
+    const { id, displayName = 'Suggestions/Feedback', fields } = formDetails;
+    const fieldsArray = fieldsToArray(fields);
+    console.log('farray', fieldsArray);
+    const script = `
+<script src="https://formify.vercel.app/formify.js"></script>
+<script>
+  const fields = '${fieldsArray}'.split(',').filter((f) => f);
+  const formURL = 'https://formify.vercel.app/api/forms/submissions?id=${id}';
+  const heading = '${displayName}';
+  formifyInit(fields, formURL, heading);
+</script>
+`;
+    try {
+      await copyToClipboard(script);
+      toast.success('Script copied!');
+    } catch (err) {
+      toast.success('Failed tocopied!');
+    }
   };
 
   const handleEdit = (

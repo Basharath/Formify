@@ -5,7 +5,10 @@ import { parseFieldNames } from '../utils';
 
 interface UserFormItemType {
   formDetails: UserFormTypeWithId;
-  onScriptClick: (e: MouseEvent<HTMLElement>) => void;
+  onScriptClick: (
+    e: MouseEvent<HTMLElement>,
+    formDetails: UserFormTypeWithId
+  ) => void;
   onEditClick: (
     e: MouseEvent<HTMLElement>,
     formDetails: UserFormTypeWithId
@@ -37,7 +40,7 @@ function UserFormItem({
         </div>
         <div
           className="w-2/12 grid place-content-center group"
-          onClick={onScriptClick}
+          onClick={(e) => onScriptClick(e, formDetails)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +59,7 @@ function UserFormItem({
         </div>
         <div
           className="w-2/12 grid place-content-center group"
-          onClick={(e: MouseEvent<HTMLElement>) => onEditClick(e, formDetails)}
+          onClick={(e) => onEditClick(e, formDetails)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

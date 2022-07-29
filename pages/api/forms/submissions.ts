@@ -36,13 +36,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (req.method === 'GET') {
-    const useFormId = req.query.id as string;
+    const userFormId = req.query.id as string;
 
-    if (useFormId) {
+    if (userFormId) {
       try {
         const result = await prisma.form.findMany({
           where: {
-            forminfoId: useFormId,
+            forminfoId: userFormId,
+          },
+          orderBy: {
+            updatedAt: 'desc',
           },
         });
         return res.status(200).send(result);

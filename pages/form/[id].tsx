@@ -1,9 +1,12 @@
 import Router, { useRouter } from 'next/router';
+import Head from 'next/head';
+
 import React, { useState, useEffect } from 'react';
 import { UserType, FormSubmissionType } from '../../types';
 import Link from 'next/link';
 import { getFormSubmissions } from '../../http';
 import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 interface FormProps {
   user: UserType;
@@ -14,10 +17,10 @@ function Form({ user }: FormProps) {
   const formId = query.id as string;
   const [submissions, setSubmissions] = useState([]);
 
-  useEffect(() => {
-    if (!isReady) return;
-    if (!user) Router.push('/login');
-  }, [isReady, user]);
+  // useEffect(() => {
+  //   if (!isReady) return;
+  //   if (!user) Router.push('/login');
+  // }, [isReady, user]);
 
   useEffect(() => {
     if (formId) getForms(formId);
@@ -27,28 +30,39 @@ function Form({ user }: FormProps) {
     try {
       const result = await getFormSubmissions(id);
       setSubmissions(result.data);
-    } catch (err: any) {
-      console.log('err', err);
-      toast.error(err?.response?.data);
+    } catch (err) {
+      console.log('Form', err);
+      if (err instanceof AxiosError) {
+        toast.error(err?.response?.data);
+      }
     }
     // console.log('Form manage', result);
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h1 className="text-5xl">Submissions</h1>
-      <div className="my-4">
-        {submissions.length > 0 &&
-          submissions.map((s: FormSubmissionType) => (
-            <div key={s.id} className="flex space-x-4">
-              <div>{s.id}</div>
-              <div>{s.name}</div>
-              <div>{s.email}</div>
-            </div>
-          ))}
+    <>
+      <Head>
+        <title>Formify - Dashboard</title>
+        <meta name="description" content="Formify dashboard" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="flex flex-col justify-center items-center">
+        <h1 className="text-5xl">Submissions</h1>
+        <div className="my-4">
+          {submissions.length > 0 &&
+            submissions.map((s: FormSubmissionType) => (
+              <div key={s.id} className="flex space-x-4">
+                <div>{s.id}</div>
+                <div>{s.name}</div>
+                <div>{s.email}</div>
+                <div>{s.twitter}</div>
+                <div>{s.message}</div>
+              </div>
+            ))}
+        </div>
+        <Link href="/dashboard">Go back</Link>
       </div>
-      <Link href="/dashboard">Go back</Link>
-    </div>
+    </>
   );
 }
 
