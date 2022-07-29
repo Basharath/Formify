@@ -5,7 +5,6 @@ import {
   UserFormType,
   UserSignupType,
   FormSubmissionType,
-  UserType,
 } from '../types';
 
 const baseURL = '/api';
@@ -40,12 +39,13 @@ const forms = '/forms';
 const usersUrl = '/users';
 
 export const getUserForms = () => API.get(`${forms}/userforms`);
+export const getUserForm = (id: string) => API.get(`${forms}/userforms`);
 export const createUserForm = (newForm: UserFormType) =>
   API.post(`${forms}/userforms`, newForm);
 export const updateUserForm = (id: string, formData: UserFormType) =>
-  API.put(`${forms}/userforms?${id}`, formData);
+  API.put(`${forms}/userforms?id=${id}`, formData);
 export const deleteUserForm = (id: string) =>
-  API.delete(`${forms}/userforms?${id}`);
+  API.delete(`${forms}/userforms?id=${id}`);
 
 export const getFormSubmissions = (userFormId: string) =>
   API.get(`${forms}/submissions?id=${userFormId}`);

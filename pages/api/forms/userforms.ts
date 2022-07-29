@@ -75,6 +75,9 @@ export default async function handler(
         where: {
           ownerId: authData.id,
         },
+        orderBy: {
+          updatedAt: 'desc',
+        },
       });
       return res.status(200).send(result);
     } catch (err) {

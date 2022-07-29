@@ -1,29 +1,35 @@
 import Head from 'next/head';
 import React, { useState, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { UserFormType, UserType } from '../types';
-import toast, { Toaster } from 'react-hot-toast';
-import { createUserForm, getUserForms, signout } from '../http';
+import { UserFormType, UserFormTypeWithId, UserType } from '../types';
+import toast from 'react-hot-toast';
+import {
+  createUserForm,
+  deleteUserForm,
+  getUserForms,
+  signout,
+  updateUserForm,
+} from '../http';
 import { AxiosError } from 'axios';
 import UserFormItem from '../components/UserFormItem';
 import FormMenubar from '../components/FormMenubar';
-import { generateFieldsString, parseFieldNames } from '../utils';
+import {
+  generateFieldsObject,
+  generateFieldsString,
+  parseFieldNames,
+} from '../utils';
 import FormModal from '../components/FormModal';
-import Layout from '../components/Layout';
 import { GetServerSideProps } from 'next';
 import cookie from 'cookie';
 
-interface FormType extends UserFormType {
-  id: string;
-}
-
 interface DashboardProps {
-  userForms: FormType[];
+  userForms: UserFormTypeWithId[];
   user: UserType;
 }
 
 const initialFormInputs = {
   name: '',
   displayName: '',
+  id: '',
 };
 
 const initialFormCheckboxes = {
@@ -37,7 +43,8 @@ const initialFormCheckboxes = {
 function Dashboard({ userForms, user }: DashboardProps) {
   const [formInputs, setFormInputs] = useState(initialFormInputs);
   const [formCheckboxes, setFormCheckboxes] = useState(initialFormCheckboxes);
-  const [forms, setForms] = useState<FormType[]>(userForms);
+  const [forms, setForms] = useState<UserFormTypeWithId[]>(userForms);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +58,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
     }));
   };
 
-  const createForm = async () => {
+  const createAndUpateForm = async (id: string) => {
     if (formInputs.name === '') {
       toast.error('Please add the form name');
       return;
@@ -63,12 +70,21 @@ function Dashboard({ userForms, user }: DashboardProps) {
     };
 
     try {
-      const result = await createUserForm(formData);
+      let result: { data: UserFormTypeWithId };
+      if (isEditMode && id) {
+        result = await updateUserForm(id, formData);
+      } else {
+        result = await createUserForm(formData);
+      }
       if (result.data) {
-        setForms((prev) => [result.data, ...prev]);
+        if (isEditMode) {
+          const filteredForms = forms.filter((f) => f.id !== id);
+          setForms([result.data, ...filteredForms]);
+        } else setForms((prev) => [result.data, ...prev]);
         setFormInputs(initialFormInputs);
         setFormCheckboxes(initialFormCheckboxes);
         setIsModalOpen(() => false);
+        setIsEditMode(false);
       }
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -77,18 +93,6 @@ function Dashboard({ userForms, user }: DashboardProps) {
       // console.error('err', err);
     }
   };
-
-  // const getForms = async () => {
-  //   try {
-  //     const res = await getUserForms();
-  //     setForms(res.data);
-  //   } catch (err) {
-  //     // if (err instanceof AxiosError) {
-  //     //   toast.error(err?.response?.data);
-  //     // }
-  //   }
-  //   // console.log('Form manage', result);
-  // };
 
   const handleSignout = async () => {
     try {
@@ -107,14 +111,46 @@ function Dashboard({ userForms, user }: DashboardProps) {
     console.log('Click on Script');
   };
 
-  const handleEdit = (e: MouseEvent<HTMLElement>) => {
+  const handleEdit = (
+    e: MouseEvent<HTMLElement>,
+    formDetails: UserFormTypeWithId
+  ) => {
     e.stopPropagation();
-    console.log('Click on Edit');
+    e.target;
+    const { name, id, displayName, fields, ownerId } = formDetails;
+
+    setFormInputs({
+      name,
+      displayName,
+      id,
+    });
+    console.log('gen fields', generateFieldsObject(fields));
+    setFormCheckboxes({
+      ...initialFormCheckboxes,
+      ...generateFieldsObject(fields),
+    });
+
+    setIsEditMode(true);
+    setIsModalOpen(true);
+
+    // console.log('Click on Edit');
   };
 
-  const handleDelete = (e: MouseEvent<HTMLElement>) => {
+  const handleDelete = async (e: MouseEvent<HTMLElement>, id: string) => {
     e.stopPropagation();
-    console.log('Click on Delete');
+    try {
+      const result = await deleteUserForm(id);
+      if (result.data) {
+        const updatedForms = forms.filter((f) => f.id !== id);
+        setForms(updatedForms);
+        toast.success('Deleted successfully');
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err?.response?.data);
+      }
+    }
+    // console.log('Click on Delete');
   };
 
   const closeModal = () => setIsModalOpen(false);
@@ -196,9 +232,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
             {forms?.map((f) => (
               <UserFormItem
                 key={f.id}
-                name={f.name}
-                formId={f.id}
-                fields={parseFieldNames(f.fields)}
+                formDetails={f}
                 onScriptClick={handleScript}
                 onEditClick={handleEdit}
                 onDeleteClick={handleDelete}
@@ -212,8 +246,9 @@ function Dashboard({ userForms, user }: DashboardProps) {
               checkboxesState={formCheckboxes}
               onInputChange={handleInputs}
               onCheckboxChange={handleCheckboxes}
-              onSubmit={createForm}
+              onSubmit={createAndUpateForm}
               closeModal={closeModal}
+              editMode={isEditMode}
             />
           )}
         </div>
