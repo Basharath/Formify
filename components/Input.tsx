@@ -6,9 +6,17 @@ interface InputType {
   name: string;
   value: string;
   placeholder: string;
+  classes?: string;
 }
 
-function Input({ onChange, type, name, value, placeholder }: InputType) {
+function Input({
+  onChange,
+  type,
+  name,
+  value,
+  placeholder,
+  classes,
+}: InputType) {
   return (
     <div className="w-full mb-4">
       <input
@@ -16,7 +24,7 @@ function Input({ onChange, type, name, value, placeholder }: InputType) {
         type={type}
         name={name}
         value={value}
-        className="border rounded-md p-2 w-full"
+        className={classes || 'border rounded-md p-2 w-full'}
         placeholder={placeholder}
       />
     </div>
