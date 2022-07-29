@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     try {
       const res = await getUser();
       setUser(res.data);
-    } catch (err: any) {
+    } catch (err) {
       // console.log(err);
       // toast.error(err?.response?.data);
       // toast.error('Invalid login');

@@ -6,6 +6,7 @@ import { signin, signout, signup } from '../http';
 import toast from 'react-hot-toast';
 import Input from '../components/Input';
 import LoginBtn from '../components/LoginBtn';
+import { AxiosError } from 'axios';
 
 interface LoginProps {
   user: UserType;
@@ -30,7 +31,10 @@ export default function Login({ user }: LoginProps) {
 
   const handleSignin = async (e: MouseEvent) => {
     e.preventDefault();
-    if (input.email === '' || input.password === '') return;
+    if (input.email === '' || input.password === '') {
+      toast.error('Please fill the details');
+      return;
+    }
 
     const { email, password } = input;
     const data = {
@@ -40,23 +44,29 @@ export default function Login({ user }: LoginProps) {
     try {
       const result = await signin(data);
       if (result.data) location.href = '/dashboard';
-    } catch (err: any) {
+    } catch (err) {
       console.error('signin', err);
-      toast.error(err?.response?.data);
+      if (err instanceof AxiosError) {
+        toast.error(err?.response?.data);
+      }
     }
   };
   const handleSignup = async (e: MouseEvent) => {
     e.preventDefault();
-    if (input.email === '' || input.password === '' || input.name === '')
+    if (input.email === '' || input.password === '' || input.name === '') {
+      toast.error('Please fill the details');
       return;
+    }
     try {
       const result = await signup(input);
       if (result.data) {
         location.href = '/dashboard';
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('signup', err);
-      toast.error(err?.response?.data);
+      if (err instanceof AxiosError) {
+        toast.error(err?.response?.data);
+      }
     }
   };
 
