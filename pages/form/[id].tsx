@@ -1,9 +1,8 @@
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import Head from 'next/head';
 
 import React, { useState, MouseEvent } from 'react';
-import { UserType, FormSubmissionType, FieldsObjType } from '../../types';
-import Link from 'next/link';
+import { FormSubmissionType, FieldsObjType } from '../../types';
 import { deleteFormSubmission, getFormSubmissions } from '../../http';
 import toast from 'react-hot-toast';
 import { AxiosError } from 'axios';
@@ -12,6 +11,7 @@ import cookie from 'cookie';
 import FormSubmissionMenubar from '../../components/FormSubmissionMenubar';
 import FormSubmissionItem from '../../components/FormSubmissionItem';
 import { parseFieldNames, fieldsToArray } from '../../utils';
+import NProgress from 'nprogress';
 
 interface FormProps {
   submittedForms: FormSubmissionType[];
@@ -23,12 +23,14 @@ function FormSubmission({ submittedForms }: FormProps) {
   const formFields = submissions[0].forminfo?.fields as string;
   const fieldsArray = parseFieldNames(formFields);
 
-  // console.log('submissions', submissions);
+  const start = () => NProgress.start();
+  const end = () => NProgress.done();
 
   const handleGoBack = () => Router.back();
 
   const handleDelete = async (e: MouseEvent<HTMLElement>, id: string) => {
     e.stopPropagation();
+    start();
     try {
       const result = await deleteFormSubmission(id);
       if (result.data) {
@@ -42,27 +44,16 @@ function FormSubmission({ submittedForms }: FormProps) {
           const updatedForms = submissions.filter((f) => f.id !== id);
           setSubmissions(updatedForms);
         }
+        end();
         toast.success('Deleted successfully');
       }
     } catch (err) {
+      end();
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
     }
-    // console.log('Click on Delete');
   };
-  // const getForms = async (id: string) => {
-  //   try {
-  //     const result = await getFormSubmissions(id);
-  //     setSubmissions(result.data);
-  //   } catch (err) {
-  //     console.log('Form', err);
-  //     if (err instanceof AxiosError) {
-  //       toast.error(err?.response?.data);
-  //     }
-  //   }
-  //   // console.log('Form manage', result);
-  // };
 
   return (
     <>
@@ -113,33 +104,12 @@ function FormSubmission({ submittedForms }: FormProps) {
                 No submissions yet
               </div>
             )}
-            {/* {forms?.map((f) => (
-              <UserFormItem
-                key={f.id}
-                formDetails={f}
-                onScriptClick={handleScript}
-                onEditClick={handleEdit}
-                onDeleteClick={handleDelete}
-              />
-            ))} */}
           </div>
         </div>
       </main>
     </>
   );
 }
-
-// {submissions.length > 0 &&
-//   submissions[0].id &&
-//   submissions.map((s: FormSubmissionType) => (
-//     <div key={s.id} className="flex space-x-4">
-//       <div>{s.id}</div>
-//       <div>{s.name}</div>
-//       <div>{s.email}</div>
-//       <div>{s.twitter}</div>
-//       <div>{s.message}</div>
-//     </div>
-//   ))}
 
 export default FormSubmission;
 

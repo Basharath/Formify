@@ -5,8 +5,6 @@ import { Toaster } from 'react-hot-toast';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 
-
-
 function MyApp({ Component, pageProps }: AppProps) {
   const [isMounted, setIsMounted] = useState(false);
 
