@@ -28,24 +28,33 @@
 
 /* scrollbar */
 /* width */
+body::-webkit-scrollbar {
+  width: 10px;
+}
 .scrollbar::-webkit-scrollbar {
   width: 5px;
 }
 
 /* Track */
+body::-webkit-scrollbar-track {
+  background: #bfdbfe;
+  border-radius: 10px;
+}
 .scrollbar::-webkit-scrollbar-track {
   background: #bfdbfe;
   border-radius: 5px;
 }
 
 /* Handle */
-.scrollbar::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
   background: #c084fc;
   border-radius: 5px;
 }
 
 /* Handle on hover */
-.scrollbar::-webkit-scrollbar-thumb:hover {
+.scrollbar::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
   background: #9333ea;
 }
 
@@ -109,4 +118,8 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
