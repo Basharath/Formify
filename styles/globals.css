@@ -40,7 +40,6 @@
   background: #9333ea;
 }
 
-
 /* Loader */
 #nprogress {
   pointer-events: none;
@@ -68,7 +67,8 @@
   position: fixed;
   z-index: 1031;
   top: 50%;
-  right: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
 }
 
 #nprogress .spinner-icon {

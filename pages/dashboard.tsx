@@ -1,11 +1,10 @@
 import Head from 'next/head';
-import React, { useState, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { UserFormType, UserFormTypeWithId, UserType } from '../types';
+import React, { useState, MouseEvent, ChangeEvent } from 'react';
+import { UserFormTypeWithId, UserType } from '../types';
 import toast from 'react-hot-toast';
 import {
   createUserForm,
   deleteUserForm,
-  getUserForms,
   signout,
   updateUserForm,
 } from '../http';
@@ -14,7 +13,6 @@ import UserFormItem from '../components/UserFormItem';
 import FormMenubar from '../components/FormMenubar';
 import {
   copyToClipboard,
-  fieldsToArray,
   generateFieldsObject,
   generateFieldsString,
 } from '../utils';
@@ -22,7 +20,7 @@ import FormModal from '../components/FormModal';
 import { GetServerSideProps } from 'next';
 import cookie from 'cookie';
 import NProgress from 'nprogress';
-import { endianness } from 'os';
+import Router from 'next/router';
 
 interface DashboardProps {
   userForms: UserFormTypeWithId[];
@@ -61,7 +59,17 @@ function Dashboard({ userForms, user }: DashboardProps) {
     }));
   };
 
+  const start = () => NProgress.start();
+  const end = () => NProgress.done();
+
   const createAndUpateForm = async (id: string) => {
+    const numberOfFieldsFilled = Object.entries(formCheckboxes).filter(
+      ([k, v]) => v
+    );
+    if (numberOfFieldsFilled.length < 1) {
+      toast.error('Please check at least one field');
+      return;
+    }
     if (formInputs.name === '') {
       toast.error('Please add the form name');
       return;
@@ -72,8 +80,6 @@ function Dashboard({ userForms, user }: DashboardProps) {
       ownerId: user.id,
     };
 
-    const start = () => NProgress.start();
-    const end = () => NProgress.done();
     try {
       start();
       let result: { data: UserFormTypeWithId };
@@ -104,8 +110,10 @@ function Dashboard({ userForms, user }: DashboardProps) {
 
   const handleSignout = async () => {
     try {
+      start();
       const res = await signout();
-      if (res.data) location.href = '/login';
+      end();
+      if (res.data) Router.push('/login');
     } catch (err) {
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);

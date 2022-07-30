@@ -12,6 +12,8 @@ import {
   GoogleLogin,
   CredentialResponse,
 } from '@react-oauth/google';
+import NProgress from 'nprogress';
+import Router from 'next/router';
 
 export default function Login() {
   const [input, setInput] = useState({ email: '', password: '', name: '' });
@@ -21,10 +23,15 @@ export default function Login() {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const start = () => NProgress.start();
+  const end = () => NProgress.done();
+
   const handleSignin = async (e: MouseEvent) => {
     e.preventDefault();
+    start();
     if (input.email === '' || input.password === '') {
       toast.error('Please fill the details');
+      end();
       return;
     }
 
@@ -35,9 +42,11 @@ export default function Login() {
     };
     try {
       const result = await signin(data);
-      if (result.data) location.href = '/dashboard';
+      end();
+      if (result.data) Router.push('/dashboard');
     } catch (err) {
       // console.error('signin', err);
+      end();
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
@@ -45,17 +54,21 @@ export default function Login() {
   };
   const handleSignup = async (e: MouseEvent) => {
     e.preventDefault();
+    start();
     if (input.email === '' || input.password === '' || input.name === '') {
       toast.error('Please fill the details');
+      end();
       return;
     }
     try {
       const result = await signup(input);
+      end();
       if (result.data) {
-        location.href = '/dashboard';
+        Router.push('/dashboard');
       }
     } catch (err) {
       // console.error('signup', err);
+      end();
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
@@ -66,7 +79,7 @@ export default function Login() {
     const googleToken = res.credential as string;
     try {
       const result = await googleSignin({ googleToken });
-      if (result.data) location.href = '/dashboard';
+      if (result.data) Router.push('/dashboard');
     } catch (err) {
       // console.error('signin', err);
       if (err instanceof AxiosError) {
