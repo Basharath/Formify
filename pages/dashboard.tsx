@@ -21,6 +21,8 @@ import {
 import FormModal from '../components/FormModal';
 import { GetServerSideProps } from 'next';
 import cookie from 'cookie';
+import NProgress from 'nprogress';
+import { endianness } from 'os';
 
 interface DashboardProps {
   userForms: UserFormTypeWithId[];
@@ -70,7 +72,10 @@ function Dashboard({ userForms, user }: DashboardProps) {
       ownerId: user.id,
     };
 
+    const start = () => NProgress.start();
+    const end = () => NProgress.done();
     try {
+      start();
       let result: { data: UserFormTypeWithId };
       if (isEditMode && id) {
         result = await updateUserForm(id, formData);
@@ -86,8 +91,10 @@ function Dashboard({ userForms, user }: DashboardProps) {
         setFormCheckboxes(initialFormCheckboxes);
         setIsModalOpen(() => false);
         setIsEditMode(false);
+        end();
       }
     } catch (err) {
+      end();
       if (err instanceof AxiosError) {
         toast.error(err?.response?.data);
       }
