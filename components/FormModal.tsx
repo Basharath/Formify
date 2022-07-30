@@ -41,10 +41,10 @@ function FormModal({
         onClick={handlePropagation}
       >
         <h3 className="text-2xl font-semibold text-center mb-4">
-          {editMode ? 'Update the form' : 'Create new form'}
+          {editMode ? 'Edit form' : 'Create new form'}
         </h3>
         <div>
-          <label className="font-medium">Enter form name</label>
+          <label className="font-medium">Form name</label>
           <Input
             name="name"
             value={inputsState.name}
@@ -55,7 +55,7 @@ function FormModal({
           />
         </div>
         <div>
-          <label className="font-medium">Enter display name</label>
+          <label className="font-medium">Embedded form display name</label>
           <Input
             name="displayName"
             value={inputsState.displayName}

@@ -26,13 +26,13 @@ function UserFormItem({
 
   return (
     <Link href={`/form/${formId}`}>
-      <div className="w-auto flex justify-evenly items-center p-4 py-5 min-w-[700px] bg-blue-50 hover:bg-blue-100 cursor-pointer border-b last:border-b-0">
+      <div className="w-auto flex justify-evenly items-center p-4 py-5 min-w-[700px] bg-gray-50 hover:bg-blue-100 cursor-pointer border-b last:border-b-0">
         <div className="w-3/12 font-medium">{name}</div>
         <div className="w-3/12 flex flex-wrap md:flex-nowrap">
           {parseFieldNames(fields).map((f, idx) => (
             <span
               key={idx}
-              className="px-1 py-[2px] mr-1 rounded-md bg-blue-200 text-sm mb-1 md:mb-0"
+              className="px-1 py-[2px] mr-1 rounded-md bg-orange-200 text-sm mb-1 md:mb-0"
             >
               {f}
             </span>
