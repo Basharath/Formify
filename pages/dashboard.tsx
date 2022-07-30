@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import React, { useState, MouseEvent, ChangeEvent } from 'react';
 import { UserFormTypeWithId, UserType } from '../types';
 import toast from 'react-hot-toast';
@@ -22,6 +21,7 @@ import cookie from 'cookie';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import Image from 'next/image';
+import Header from '../components/Header';
 
 interface DashboardProps {
   userForms: UserFormTypeWithId[];
@@ -196,11 +196,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
 
   return (
     <>
-      <Head>
-        <title>Formify - Dashboard</title>
-        <meta name="description" content="Formify dashboard" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Header title="Formify - Dashboard" />
       <main className="bg-purple-100 w-full h-screen overflow-hidden">
         <div className="p-4 pt-8 md:p-10 max-w-[1200px] mx-auto">
           <div className="bg-blue-200 p-4 rounded-xl flex justify-between items-center mb-8">

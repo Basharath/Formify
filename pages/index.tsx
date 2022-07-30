@@ -1,20 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import Head from 'next/head';
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 export default function Home() {
   useEffect(() => {}, []);
 
   return (
     <>
-      <Head>
-        <title>Feedback form</title>
-        <meta name="description" content="PlanetScale Quickstart for Next.js" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Header title="Formify" />
 
       <main className="bg-gradient-to-r from-purple-100 to-blue-100 overflow-hidden">
         <div className="py-2 pt-10 max-w-[1200px] mx-auto">
@@ -49,10 +45,10 @@ export default function Home() {
           <div className="h-[80vh]">
             <div className="flex items-center justify-center md:p-10 md:px-14 rounded-2xl my-10 mb-24 px-4">
               <div className="text-center text-gray-800">
-                <span className="text-4xl sm:text-5xl leading-[120%]">
+                <h1 className="text-4xl sm:text-5xl leading-[120%]">
                   <span className="font-Charm">f</span>ormify any site with No
                   Code
-                </span>
+                </h1>
                 <p className="max-w-2xl mx-auto my-10 text-xl">
                   <span className="font-Charm">f</span>ormify is an{' '}
                   <span className="font-semibold italic">open source</span>{' '}

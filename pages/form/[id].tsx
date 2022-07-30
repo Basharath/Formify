@@ -1,5 +1,4 @@
 import Router from 'next/router';
-import Head from 'next/head';
 
 import React, { useState, MouseEvent } from 'react';
 import { FormSubmissionType, FieldsObjType } from '../../types';
@@ -12,6 +11,7 @@ import FormSubmissionMenubar from '../../components/FormSubmissionMenubar';
 import FormSubmissionItem from '../../components/FormSubmissionItem';
 import { parseFieldNames, fieldsToArray } from '../../utils';
 import NProgress from 'nprogress';
+import Header from '../../components/Header';
 
 interface FormProps {
   submittedForms: FormSubmissionType[];
@@ -57,11 +57,8 @@ function FormSubmission({ submittedForms }: FormProps) {
 
   return (
     <>
-      <Head>
-        <title>{formName}</title>
-        <meta name="description" content={formName} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Header title="Formify - Submissions" />
+
       <main className="bg-purple-100 w-full h-screen overflow-hidden">
         <div className="p-4 pt-8 md:p-10 max-w-[1200px] mx-auto">
           <div className="bg-blue-200 p-2.5 md:p-4 rounded-xl grid grid-cols-3 items-center  mb-8">
