@@ -14,6 +14,7 @@ import {
 } from '@react-oauth/google';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import Image from 'next/image';
 
 export default function Login() {
   const [input, setInput] = useState({ email: '', password: '', name: '' });
@@ -106,7 +107,17 @@ export default function Login() {
           <div className="flex flex-col justify-center items-center ">
             <div className="p-6 custom-shadow rounded-lg mt-32 bg-white">
               <form className="flex flex-col items-center justify-center w-[300px] max-w-md">
-                <h2 className="text-4xl font-medium mb-5">Formify</h2>
+                {/* <h2 className="text-4xl mb-5">
+                  <span className="font-Charm text-black">f</span>ormify
+                </h2> */}
+                <div className="select-none">
+                  <Image
+                    src="/images/logo.svg"
+                    width={150}
+                    height={54}
+                    alt="Formify logo"
+                  />
+                </div>
                 {!isLogin && (
                   <Input
                     onChange={handleInput}
