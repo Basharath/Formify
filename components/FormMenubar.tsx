@@ -9,7 +9,7 @@ function FormMenubar() {
         Form script
       </div>
       <div className="w-2/12 font-semibold text-lg grid place-content-center">
-        Edit
+        Edit form
       </div>
       <div className="w-2/12 font-semibold text-lg grid place-content-center md:pl-10">
         Delete form

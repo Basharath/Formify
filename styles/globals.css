@@ -39,3 +39,65 @@
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background: #9333ea;
 }
+
+
+/* Loader */
+#nprogress {
+  pointer-events: none;
+}
+/* #nprogress .bar {
+  background: dodgerblue;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+} */
+
+#nprogress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.123);
+  top: 0;
+  left: 0;
+}
+#nprogress .spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 50%;
+  right: 50%;
+}
+
+#nprogress .spinner-icon {
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+
+  border: solid 3px transparent;
+  border-top-color: #a855f7;
+  border-left-color: #a855f7;
+  border-radius: 50%;
+
+  -webkit-animation: nprogress-spinner 400ms linear infinite;
+  animation: nprogress-spinner 400ms linear infinite;
+}
+
+@-webkit-keyframes nprogress-spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes nprogress-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
