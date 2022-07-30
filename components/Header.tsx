@@ -8,6 +8,7 @@ interface HeaderPropType {
 function Header({ title }: HeaderPropType) {
   const description = 'Create, manage and embed forms with No-Code';
   const URL = 'https://formify.vercel.app';
+  const image = URL + '/images/formify.png';
   return (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,7 +30,7 @@ function Header({ title }: HeaderPropType) {
       <meta property="og:url" content={URL} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content="/images/formify.png" />
+      <meta property="og:image" content={image} />
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter cards */}
@@ -37,7 +38,7 @@ function Header({ title }: HeaderPropType) {
       <meta property="twitter:url" content={URL} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content="/images/formify.png" />
+      <meta property="twitter:image" content={image} />
       <meta name="twitter:site" content="@dev_apt" />
       <meta name="twitter:creator" content="@wahvinci" />
       <meta name="theme-color" content="#a5b4fc" />

@@ -53,7 +53,7 @@ export default function Home() {
                   <span className="font-Charm">f</span>ormify is an{' '}
                   <span className="font-semibold italic">open source</span>{' '}
                   application that lets you{' '}
-                  <span className="font-medium italic">collect</span>,{' '}
+                  <span className="font-medium italic">create</span>,{' '}
                   <span className="font-medium italic">manage</span> and{' '}
                   <span className="font-medium italic">embed</span> forms on any
                   site without writing single line of code
