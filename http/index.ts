@@ -60,5 +60,7 @@ export const signin = (userData: UserSigninType) =>
 export const signup = (userData: UserSignupType) =>
   API.post(`${usersUrl}/signup`, userData);
 export const signout = () => API.post(`${usersUrl}/signout`);
+export const googleSignin = (token: { googleToken: string }) =>
+  API.post(`${usersUrl}/googleauth`, token);
 // export const changePass = (userData: any) =>
 //   API.post(`${usersUrl}/changepassword`, userData);
