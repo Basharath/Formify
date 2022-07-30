@@ -114,7 +114,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
     e.stopPropagation();
     const { id, displayName = 'Suggestions/Feedback', fields } = formDetails;
     const script = `
-<script src="https://formify.vercel.app/formify.js"></script>
+<script src="https://formify.vercel.app/script.min.js"></script>
 <script>
   const fields = '${fields}'.split(',').filter((f) => f);
   const formURL = 'https://formify.vercel.app/api/forms/submissions?id=${id}';
