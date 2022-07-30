@@ -6,6 +6,36 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none !important;
+}
+
+/* scrollbar */
+/* width */
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.scrollbar::-webkit-scrollbar-track {
+  background: #bfdbfe;
+  border-radius: 5px;
+}
+
+/* Handle */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #c084fc;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9333ea;
 }

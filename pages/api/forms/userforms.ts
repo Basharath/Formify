@@ -2,6 +2,7 @@
 import prisma from '../../../lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import validateAuth from '../../../lib/validateAuth';
+import { Prisma } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
@@ -65,6 +66,13 @@ export default async function handler(
       return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2014') {
+          return res
+            .status(400)
+            .send("Can't delete due to existing submissions!");
+        }
+      }
       return res.status(500).send('Something went wrong');
     }
   }

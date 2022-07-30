@@ -113,12 +113,10 @@ function Dashboard({ userForms, user }: DashboardProps) {
   ) => {
     e.stopPropagation();
     const { id, displayName = 'Suggestions/Feedback', fields } = formDetails;
-    const fieldsArray = fieldsToArray(fields);
-    console.log('farray', fieldsArray);
     const script = `
 <script src="https://formify.vercel.app/formify.js"></script>
 <script>
-  const fields = '${fieldsArray}'.split(',').filter((f) => f);
+  const fields = '${fields}'.split(',').filter((f) => f);
   const formURL = 'https://formify.vercel.app/api/forms/submissions?id=${id}';
   const heading = '${displayName}';
   formifyInit(fields, formURL, heading);
@@ -138,14 +136,13 @@ function Dashboard({ userForms, user }: DashboardProps) {
   ) => {
     e.stopPropagation();
     e.target;
-    const { name, id, displayName, fields, ownerId } = formDetails;
+    const { name, id, displayName, fields } = formDetails;
 
     setFormInputs({
       name,
       displayName,
       id,
     });
-    console.log('gen fields', generateFieldsObject(fields));
     setFormCheckboxes({
       ...initialFormCheckboxes,
       ...generateFieldsObject(fields),
@@ -174,7 +171,12 @@ function Dashboard({ userForms, user }: DashboardProps) {
     // console.log('Click on Delete');
   };
 
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsEditMode(false);
+    setFormInputs(initialFormInputs);
+    setFormCheckboxes(initialFormCheckboxes);
+  };
 
   return (
     <>
@@ -186,7 +188,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
       <main className="bg-purple-100 w-full h-screen overflow-hidden">
         <div className="p-4 pt-8 md:p-10 max-w-[1200px] mx-auto">
           <div className="bg-blue-200 p-4 rounded-xl flex justify-between items-center mb-8">
-            <div className="text-4xl font-medium">Formify</div>
+            <div className="text-2xl md:text-4xl font-medium">Formify</div>
             <div className="flex items-center space-x-8">
               <div className="font-medium">Hi, {user?.name}</div>
               <div>
@@ -204,7 +206,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
                 </button>
                 {/* Mobile views */}
                 <button
-                  // onClick={handleSignout}
+                  onClick={() => setIsModalOpen(true)}
                   className="bg-blue-500 hover:bg-blue-500/90 text-white p-1 rounded-lg mr-4 md:hidden inline-block"
                 >
                   <svg
@@ -249,7 +251,7 @@ function Dashboard({ userForms, user }: DashboardProps) {
             <FormMenubar />
           </div>
 
-          <div className="bg-gray-50 h-[65vh] md:h-[420px] mb-8 rounded-xl overflow-auto">
+          <div className="scrollbar bg-gray-50 h-[65vh] md:h-[420px] mb-8 rounded-xl overflow-auto">
             {forms?.map((f) => (
               <UserFormItem
                 key={f.id}

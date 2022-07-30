@@ -12,6 +12,7 @@ export interface FormSubmissionType {
   website: string | null;
   message: string | null;
   forminfoId: string;
+  forminfo?: UserFormType;
 }
 
 export interface UserSigninType {
