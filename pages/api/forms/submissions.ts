@@ -39,15 +39,28 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const userFormId = req.query.id as string;
 
     if (userFormId) {
+      let result;
       try {
-        const result = await prisma.form.findMany({
+        const submissions = await prisma.form.findMany({
           where: {
             forminfoId: userFormId,
+          },
+          include: {
+            forminfo: true,
           },
           orderBy: {
             updatedAt: 'desc',
           },
         });
+
+        if (submissions.length < 1) {
+          const forminfo = await prisma.forminfo.findUnique({
+            where: {
+              id: userFormId,
+            },
+          });
+          result = [{ forminfo, id: '' }];
+        } else result = submissions;
         return res.status(200).send(result);
       } catch (err) {
         console.error(err);
