@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Charm&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  @font-face {
+    font-family: 'Charm';
+    src: url('https://fonts.googleapis.com/css2?family=Charm&display=swap');
+  }
+}
 
 .custom-shadow {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
