@@ -30,6 +30,36 @@ This project is done as a part of [PlanetScale](https://planetscale.com/) and [H
 4. Embed the script on any site
 5. Whenever somebody submits the form you can see the data in the submissions of Formify dashboard
 
+**Sample script that get's copied on clicking the code icon**
+
+```js
+<script src="https://formify.vercel.app/script.min.js"></script>
+<script>
+  const fields = 'name,email,message'.split(',').filter((f) => f);
+  const formURL = 'https://formify.vercel.app/api/forms/submissions?id=<ID-of-the-form>';
+  const heading = 'Contact/feedback';
+  formifyInit(fields, formURL, heading);
+</script>
+```
+
+**To embed forms on react based sites use `formify-form` npm library**
+
+```js
+import { Form } from 'formify-form';
+
+const App = () => {
+  return (
+    <div>
+      <Form
+        formFields={['name', 'email', 'message']}
+        formURL="https://formify.vercel.app/api/forms/submissions?id=<ID from formify>"
+        formTitle="Share your feedback"
+      />
+    </div>
+  );
+};
+```
+
 ## Tech stack used in formify
 
 - NextJS
