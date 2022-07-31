@@ -133,8 +133,8 @@ export default function Home() {
           id="support"
         >
           <div className="text-3xl text-medium text-center">
-            You can support <span className="font-Charm">f</span>ormify by bying
-            a Coffee!
+            You can support <span className="font-Charm">f</span>ormify by
+            buying a Coffee!
           </div>
           <Link href="https://www.buymeacoffee.com/basharath">
             <a

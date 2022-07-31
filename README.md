@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Formify is an open source application that lets you create, manage and embed forms on any site without writing any code.
+Formify is an open source application that lets you create, manage and embed contact forms on any site without writing code.
 
 This project is done as a part of [PlanetScale](https://planetscale.com/) and [HashNode](https://hashnode.com/) hackathon.
 
@@ -42,13 +42,14 @@ This project is done as a part of [PlanetScale](https://planetscale.com/) and [H
 
 1. Clone the repo
 
-```
+```bash
 git clone https://github.com/Basharath/Formify.git
 ```
 
 2. Install the dependencies
 
-```
+```bash
+cd Formify
 npm install
 ```
 
@@ -61,23 +62,23 @@ SERVER=<URL of the site>
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=<Google auth client ID>
 ```
 
-- To get `PLANETSCALE_PRISMA_DATABASE_URL` sign up and create a database on planetscale.com and get the connection URL for Prisma
-- Put any secret text for for `JWT_PRIVATE`
-- `SERVER` is the URL of the site you will be creating
-- To get `NEXT_PUBLIC_GOOGLE_CLIENT_ID` visit [Google cloud credentials](https://console.cloud.google.com/apis/credentials) and create a new credentials for a website and get the client ID.
+- To get `PLANETSCALE_PRISMA_DATABASE_URL` sign up and create a database on planetscale.com and get the connection URL for Prisma.
+- Put any secret text for `JWT_PRIVATE` which is used to sign JWT tokens
+- `SERVER` is the URL of the site you will be creating. This is used to give the location for the script source.
+- To get `NEXT_PUBLIC_GOOGLE_CLIENT_ID` visit [Google cloud credentials](https://console.cloud.google.com/apis/credentials) and create a new credentials for the website and get the client ID.
 
-4. After all the above env variables are set run
+4. After all the above environment variables are set, run the below command(s).
 
-```
+```bash
 npx prisma db push
-npx prisma generate # This runs automatically in previous command
+npx prisma generate # This runs automatically in the previous command
 ```
 
-This pushes the prisma schema to the database and generates schema types to use on client
+This pushes the Prisma schema to the database and generates schema types to use with the Prisma client
 
-5. Once all the above steps are done, start the dev server
+5. Once all the above steps are done, start the dev server by running the following command
 
-```
+```bash
 npm run dev
 ```
 
