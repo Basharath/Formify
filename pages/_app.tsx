@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import { Form } from 'formify-form';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,6 +33,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       {isMounted && <Toaster position="bottom-center" reverseOrder={false} />}
+      <Form
+        formFields={['name', 'email', 'message']}
+        formURL="https://formify.vercel.app/api/forms/submissions?id=946ea95d-c79b-4f07-ba1c-15aa054651af"
+        formTitle="Contact/Feedback"
+      />
       <Component {...pageProps} />
     </>
   );
