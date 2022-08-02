@@ -31,6 +31,14 @@ export default function Home() {
                   <li>Get started</li>
                 </a>
               </Link>
+              <Link href="https://github.com/Basharath/Formify">
+                <a
+                  className="border-none hover:text-purple-500 sm:inline font-medium"
+                  target="_blank"
+                >
+                  <li>Github</li>
+                </a>
+              </Link>
               <Link href="#support">
                 <a className="border-none hover:text-purple-500 hidden sm:inline font-medium">
                   <li>Support</li>
