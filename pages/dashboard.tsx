@@ -22,6 +22,7 @@ import NProgress from 'nprogress';
 import Router from 'next/router';
 import Image from 'next/image';
 import Header from '../components/Header';
+import ScriptModal from '../components/ScriptModal';
 
 interface DashboardProps {
   userForms: UserFormTypeWithId[];
@@ -48,6 +49,8 @@ function Dashboard({ userForms, user }: DashboardProps) {
   const [forms, setForms] = useState<UserFormTypeWithId[]>(userForms);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [scriptModal, setScriptModal] = useState(false);
+  const [formDetails, setFormDetails] = useState<UserFormTypeWithId>();
 
   const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
     setFormInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -128,22 +131,8 @@ function Dashboard({ userForms, user }: DashboardProps) {
     formDetails: UserFormTypeWithId
   ) => {
     e.stopPropagation();
-    const { id, displayName = 'Suggestions/Feedback', fields } = formDetails;
-    const script = `
-<script src="https://formify.vercel.app/script.min.js"></script>
-<script>
-  const fields = '${fields}'.split(',').filter((f) => f);
-  const formURL = 'https://formify.vercel.app/api/forms/submissions?id=${id}';
-  const heading = '${displayName}';
-  formifyInit(fields, formURL, heading);
-</script>
-`;
-    try {
-      await copyToClipboard(script);
-      toast.success('Script copied!');
-    } catch (err) {
-      toast.success('Failed tocopied!');
-    }
+    setFormDetails(formDetails);
+    setScriptModal(true);
   };
 
   const handleEdit = (
@@ -166,8 +155,6 @@ function Dashboard({ userForms, user }: DashboardProps) {
 
     setIsEditMode(true);
     setIsModalOpen(true);
-
-    // console.log('Click on Edit');
   };
 
   const handleDelete = async (e: MouseEvent<HTMLElement>, id: string) => {
@@ -192,6 +179,11 @@ function Dashboard({ userForms, user }: DashboardProps) {
     setIsEditMode(false);
     setFormInputs(initialFormInputs);
     setFormCheckboxes(initialFormCheckboxes);
+  };
+
+  const closeScriptModal = () => {
+    setScriptModal(false);
+    setFormDetails(undefined);
   };
 
   return (
@@ -292,6 +284,9 @@ function Dashboard({ userForms, user }: DashboardProps) {
               closeModal={closeModal}
               editMode={isEditMode}
             />
+          )}
+          {scriptModal && formDetails && (
+            <ScriptModal onClose={closeScriptModal} formDetails={formDetails} />
           )}
         </div>
       </main>
