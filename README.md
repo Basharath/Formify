@@ -42,7 +42,7 @@ This project is done as a part of [PlanetScale](https://planetscale.com/) and [H
 </script>
 ```
 
-**To embed forms on react based sites use `formify-form` npm library**
+**To embed forms as components on react based sites, use [`formify-form`](https://github.com/Basharath/Formify-form) npm library**
 
 ```js
 import { Form } from 'formify-form';
