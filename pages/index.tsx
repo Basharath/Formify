@@ -15,7 +15,7 @@ export default function Home() {
       <main className="bg-gradient-to-r from-purple-100 to-blue-100 overflow-hidden">
         <div className="py-2 pt-10 max-w-[1200px] mx-auto">
           <div className="flex justify-between items-center sm:container mx-3 px-2 md:px-8">
-            <Link href="/formeasy">
+            <Link href="/">
               <a className="border-none select-none text-4xl">
                 <Image
                   src="/images/logo.svg"
