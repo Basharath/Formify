@@ -1,4 +1,8 @@
-<h1 align="center">Formify</h1>
+<h1 align="center">
+  <a href="https://formify.vercel.app/" target="_blank">
+    <img src="public/images/logo.svg" width="130" alt="Formify" />
+  </a>
+</h1>
 
 <p align="center">
   <a href="https://github.com/Basharath/Formify/blob/master/LICENSE" target="blank">
