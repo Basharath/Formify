@@ -62,5 +62,7 @@ export const signup = (userData: UserSignupType) =>
 export const signout = () => API.post(`${usersUrl}/signout`);
 export const googleSignin = (token: { googleToken: string }) =>
   API.post(`${usersUrl}/googleauth`, token);
+export const firebaseAuth = (token: { firebaseToken: string }) =>
+  API.post(`${usersUrl}/auth`, token);
 // export const changePass = (userData: any) =>
 //   API.post(`${usersUrl}/changepassword`, userData);
