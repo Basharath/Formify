@@ -15,40 +15,42 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
-    const { googleToken } = req.body;
-    try {
-      const decodedData = jwt.decode(googleToken) as DecodedType;
-      const { name, email } = decodedData;
+  return res.send('Sorry! This end point is not supported!');
 
-      const user = await prisma.user.findUnique({
-        where: {
-          email,
-        },
-      });
+  // if (req.method === 'POST') {
+  //   const { googleToken } = req.body;
+  //   try {
+  //     const decodedData = jwt.decode(googleToken) as DecodedType;
+  //     const { name, email } = decodedData;
 
-      if (!user) {
-        const result = await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: '',
-          },
-        });
+  //     const user = await prisma.user.findUnique({
+  //       where: {
+  //         email,
+  //       },
+  //     });
 
-        const token = generateToken(result);
+  //     if (!user) {
+  //       const result = await prisma.user.create({
+  //         data: {
+  //           name,
+  //           email,
+  //           password: '',
+  //         },
+  //       });
 
-        res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
-        return res.status(201).send('Signed up successfully');
-      }
+  //       const token = generateToken(result);
 
-      const token = generateToken(user);
-      res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+  //       res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+  //       return res.status(201).send('Signed up successfully');
+  //     }
 
-      return res.status(200).send('Signin successful');
-    } catch (err) {
-      console.error('err', err);
-      return res.status(500).send('Something went wrong');
-    }
-  }
+  //     const token = generateToken(user);
+  //     res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+
+  //     return res.status(200).send('Signin successful');
+  //   } catch (err) {
+  //     console.error('err', err);
+  //     return res.status(500).send('Something went wrong');
+  //   }
+  // }
 }
