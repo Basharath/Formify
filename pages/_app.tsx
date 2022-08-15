@@ -32,12 +32,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      {isMounted && <Toaster position="bottom-center" reverseOrder={false} />}
-      <Form
-        formFields={['name', 'email', 'message']}
-        formURL="https://formify.vercel.app/api/forms/submissions?id=946ea95d-c79b-4f07-ba1c-15aa054651af"
-        formTitle="Contact/Feedback"
-      />
+      {isMounted && (
+        <>
+          <Toaster position="bottom-center" reverseOrder={false} />
+          <Form
+            formFields={['name', 'email', 'message']}
+            formURL="https://formify.vercel.app/api/forms/submissions?id=946ea95d-c79b-4f07-ba1c-15aa054651af"
+            formTitle="Contact/Feedback"
+          />
+        </>
+      )}
+
       <Component {...pageProps} />
     </>
   );
