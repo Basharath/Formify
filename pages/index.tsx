@@ -1,11 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { motion, useInView, useScroll } from 'framer-motion';
+import MacWrap from '../components/MacWrap';
+
+const duration = 1.2;
+
+const rotateVariants = {
+  flip: {
+    rotateX: 0,
+    // originX: 0.5,
+    // originY: 0.5,
+    transition: {
+      // ease: 'easeInOut',
+      duration,
+      // rotateX: {
+      //   delay: duration,
+      //   duration,
+      // },
+    },
+  },
+  hidden: {
+    rotateX: 40,
+    transition: {
+      // ease: 'easeInOut',
+      duration,
+      // rotateX: {
+      //   delay: duration,
+      //   duration,
+      // },
+    },
+  },
+};
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
   useEffect(() => {}, []);
 
   return (
@@ -25,9 +57,9 @@ export default function Home() {
                 />
               </a>
             </Link>
-            <ul className="list-none sm:flex items-center mb-0 space-x-20 text-black text-[1.1rem]">
+            <ul className="flex items-center mb-0 space-x-20 text-black text-[1.1rem]">
               <Link href="/login">
-                <a className="border-none hover:text-purple-500 sm:inline font-medium">
+                <a className="border-none hover:text-purple-500 sm:inline font-medium hidden">
                   <li>Get started</li>
                 </a>
               </Link>
@@ -89,33 +121,30 @@ export default function Home() {
 
         {/* Explore */}
         <div className="p-4">
-          <div id="explore" className="text-5xl text-center mb-20 p-4">
+          <div id="explore" className="text-5xl text-center mb-14 p-4">
             🚀
           </div>
           <div className="grid place-content-center mb-20 md:mb-40">
             <div className="text-4xl md:text-5xl drop-shadow-md mb-4 text-center ">
               Create and manage multiple forms ⛏
             </div>
-            <div className="-rotate-6 mt-10 md:mt-20 drop-shadow-md">
-              <img
-                alt="Fomify dashboard"
-                src="/images/formify-dashboard.png"
-                width={875}
-                height={383}
-              />
-            </div>
+            <MacWrap
+              alt="Fomify dashboard"
+              src="/images/formify-dashboard.png"
+              url="https://formify.vercel.app/dashboard"
+            />
           </div>
           <div className="grid place-content-center mb-20 md:mb-40">
             <div className="text-4xl md:text-5xl text-center mb-4">
               Access all submitted forms ♛
             </div>
-            <div className="rotate-6 mt-10 md:mt-20 drop-shadow-md">
-              <img
+            <div className="rotate-6">
+              <MacWrap
                 alt="Fomify dashboard"
                 src="/images/form-submissions-formify.png"
                 width={875}
                 height={383}
-                data-aos="zoom-out-up"
+                url="https://formify.vercel.app/form/946ea95d"
               />
             </div>
           </div>
@@ -123,22 +152,30 @@ export default function Home() {
             <div className="text-4xl md:text-5xl text-center mb-4">
               ☼ Embed forms easily
             </div>
-            <div className="rotate-0 mt-10 drop-shadow-md">
-              <img
+            <div className="rotate-0">
+              <MacWrap
                 alt="Fomify dashboard"
                 src="/images/formify-embed.png"
-                width={875}
-                height={346}
-                data-aos="zoom-out-up"
+                // width={875}
+                // height={346}
+                url="https://codepen.io/Basharath/pen/KKoGJaZ"
               />
             </div>
           </div>
         </div>
 
         {/* Support */}
-        <div
-          className="flex flex-col items-center space-y-6 mb-20"
+        <motion.div
+          className="flex flex-col items-center space-y-6 mb-20 p-4"
           id="support"
+          initial={{ y: 50 }}
+          whileInView={{ y: 0 }}
+          transition={{
+            type: 'spring',
+            stiffness: 120,
+            damping: 4,
+            delay: 0.3,
+          }}
         >
           <div className="text-3xl text-medium text-center">
             You can support <span className="font-Charm">f</span>ormify by
@@ -156,7 +193,7 @@ export default function Home() {
               />
             </a>
           </Link>
-        </div>
+        </motion.div>
 
         <Footer />
       </main>

@@ -17,6 +17,7 @@
     "firebase": "^9.9.2",
     "firebase-admin": "^11.0.1",
     "formify-form": "^0.1.0",
+    "framer-motion": "^7.1.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "next": "12.2.3",
