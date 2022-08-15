@@ -44,7 +44,7 @@ export default function Home() {
     <>
       <Header title="Formify" />
 
-      <main className="bg-gradient-to-r from-purple-100 to-blue-100 overflow-hidden">
+      <main className="bg-image overflow-hidden">
         <div className="py-2 pt-10 max-w-[1200px] mx-auto">
           <div className="flex justify-between items-center sm:container mx-3 px-2 md:px-8">
             <Link href="/">
