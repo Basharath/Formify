@@ -2,7 +2,7 @@ function Footer() {
   return (
     <footer className="px-10 py-4 bg-gray-700 flex flex-col items-center text-white text-lg">
       <div>This project is made as a part of</div>
-      <div>
+      <div className="text-center">
         <a
           href="https://planetscale.com/"
           target="_blank"
