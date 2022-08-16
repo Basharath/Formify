@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface MacWrapProps {
   src: string;
@@ -18,18 +18,12 @@ export default function MacWrap({
   height,
   url,
 }: MacWrapProps) {
+  const { scrollYProgress } = useScroll();
+  const rotate = useTransform(scrollYProgress, [0, 0.3], [30, 0]);
+
   return (
     <>
-      <motion.div
-        className="mt-10 drop-shadow-md"
-        initial={{ opacity: 0, scale: 0.5 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{
-          ease: 'backOut',
-          duration: 0.8,
-          delay: 0.3,
-        }}
-      >
+      <motion.div className="mt-10 drop-shadow-md">
         <div className=" rounded-2xl bg-gray-300 overflow-hidden">
           <div className="h-12 bg-gray-50 relative flex justify-center items-center">
             <div className="absolute top-4 left-4 h-auto -translate-y-1 sm:-translate-y-0.5">
@@ -50,18 +44,13 @@ export default function MacWrap({
                   <path d="M 15 2 C 11.145666 2 8 5.1456661 8 9 L 8 11 L 6 11 C 4.895 11 4 11.895 4 13 L 4 25 C 4 26.105 4.895 27 6 27 L 24 27 C 25.105 27 26 26.105 26 25 L 26 13 C 26 11.895 25.105 11 24 11 L 22 11 L 22 9 C 22 5.2715823 19.036581 2.2685653 15.355469 2.0722656 A 1.0001 1.0001 0 0 0 15 2 z M 15 4 C 17.773666 4 20 6.2263339 20 9 L 20 11 L 10 11 L 10 9 C 10 6.2263339 12.226334 4 15 4 z" />
                 </svg>
               </span>
-              <span className="text-sm sm:text-base text-ellipsis overflow-hidden whitespace-nowrap">
+              <span className="text-sm  text-ellipsis overflow-hidden whitespace-nowrap">
                 {url}
               </span>
             </div>
           </div>
           <div className="select-none">
-            <img
-              alt={alt}
-              src={src}
-              width={width || 875}
-              height={height || 383}
-            />
+            <img alt={alt} src={src} width={1024} height={465} />
           </div>
         </div>
       </motion.div>
