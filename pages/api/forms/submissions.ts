@@ -2,10 +2,12 @@
 import prisma from '../../../lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
 import validateAuth from '../../../lib/validateAuth';
+import sendMail from '../../../lib/sendMail';
+import HTMLTemplate from '../../../lib/HTMLTemplate';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { id } = req.query;
+    const id = req.query.id as string;
     const { name, email, twitter, website, message } = req.body;
     const data = {
       ...(name && { name }),
@@ -15,11 +17,34 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       ...(message && { message }),
       forminfoId: id,
     };
-    // console.log('form', data);
+    if (!id) return res.status(400).send('Invalid form ID');
+
     try {
+      const formInfo = await prisma.forminfo.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          owner: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+      if (!formInfo) return res.status(400).send('Invalid form ID');
+
       const result = await prisma.form.create({
         data,
       });
+
+      const ownerEmail = formInfo?.owner.email;
+
+      if (ownerEmail) {
+        const HTMLData = HTMLTemplate(data, formInfo?.fields, formInfo.name);
+        sendMail(ownerEmail, HTMLData);
+      }
+
       return res.status(200).send(result);
     } catch (err) {
       console.error('err', err);
