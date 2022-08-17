@@ -24,14 +24,14 @@ const template = (
   }
 
   const now = new Date();
-  const date =
-    now.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }) +
-    ' ' +
-    now.toLocaleTimeString('en-US');
+  const date = now.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  // +
+  // ' ' +
+  // now.toLocaleTimeString('en-US');
 
   return `<!DOCTYPE html>
 <html>
@@ -118,7 +118,7 @@ const template = (
 
         <div class="fe-item" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
           <p class="fe-date" style="font-size:14px">
-            Submitted date: ${date}
+            Submitted on: ${date}
           </p>
         </div>
 

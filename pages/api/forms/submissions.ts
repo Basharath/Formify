@@ -42,7 +42,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
       if (ownerEmail) {
         const HTMLData = HTMLTemplate(data, formInfo?.fields, formInfo.name);
-        sendMail(ownerEmail, HTMLData);
+        try {
+          const emailResult = await sendMail(ownerEmail, HTMLData);
+          console.log('Successful!', emailResult);
+        } catch (err) {
+          console.log("Couldn't sent email!", err);
+        }
       }
 
       return res.status(200).send(result);

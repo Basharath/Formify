@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-const sendMail = (to: string, html: string) => {
+const sendMail = async (to: string, html: string) => {
   const smtpTransport = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
@@ -18,10 +18,11 @@ const sendMail = (to: string, html: string) => {
     html,
   };
 
-  smtpTransport.sendMail(mailOptions, (err, info) => {
-    if (err) console.log('Something went wrong', err);
-    else console.log('Success', info);
-  });
+  // smtpTransport.sendMail(mailOptions, (err, info) => {
+  //   if (err) console.log('Something went wrong', err);
+  //   else console.log('Success', info);
+  // });
+  return smtpTransport.sendMail(mailOptions);
 };
 
 export default sendMail;
