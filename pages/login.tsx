@@ -7,11 +7,6 @@ import LoginBtn from '../components/LoginBtn';
 import { AxiosError } from 'axios';
 import { GetServerSideProps } from 'next';
 import cookie from 'cookie';
-// import {
-//   GoogleOAuthProvider,
-//   GoogleLogin,
-//   CredentialResponse,
-// } from '@react-oauth/google';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import Image from 'next/image';
@@ -110,6 +105,8 @@ export default function Login() {
       const result = await signInWithPopup(auth, provider);
       const token = await result.user.getIdToken();
 
+      toast('Please wait, loading!', { icon: '⌛' });
+
       const res = await firebaseAuth({ firebaseToken: token });
       if (res.data) Router.push('/dashboard');
     } catch (err) {
@@ -125,10 +122,6 @@ export default function Login() {
     authUser(auth, provider);
   };
 
-  // const handleGoogleError = () => {
-  //   toast.error('Something went wrong! Try again.');
-  // };
-
   const handleGithubAuth = async () => {
     const provider = new GithubAuthProvider();
     authUser(auth, provider);
@@ -141,17 +134,14 @@ export default function Login() {
         <meta name="description" content="Formify dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <GoogleOAuthProvider
-        clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
-      > */}
       <main className="w-full h-screen bg-purple-50">
         <div className="flex flex-col justify-center items-center ">
-          <div className="p-6 custom-shadow rounded-lg mt-32 bg-white">
+          <div className="p-6 custom-shadow rounded-lg mt-36 bg-white">
             <form className="flex flex-col items-center justify-center w-[300px] max-w-md">
               {/* <h2 className="text-4xl mb-5">
                   <span className="font-Charm text-black">f</span>ormify
                 </h2> */}
-              <div className="select-none">
+              <div className="select-none mb-10">
                 <Image
                   src="/images/logo.svg"
                   width={150}
@@ -159,7 +149,7 @@ export default function Login() {
                   alt="Formify logo"
                 />
               </div>
-              {!isLogin && (
+              {/* {!isLogin && (
                 <Input
                   onChange={handleInput}
                   type="text"
@@ -188,19 +178,11 @@ export default function Login() {
                 ) : (
                   <LoginBtn onClick={handleSignup} text="SignUp" />
                 )}
-              </div>
+              </div> */}
             </form>
-            {/* <GoogleLogin
-                onSuccess={handleGoogleAuth}
-                onError={handleGoogleError}
-                size="large"
-                width="300"
-                text="signin_with"
-                logo_alignment="center"
-              /> */}
             <button
               onClick={handleGoogleAuth}
-              className="focus:outline-none px-4 py-2 bg-gray-200/80 hover:bg-gray-200 rounded-lg text-gray-800 font-medium w-full mb-4 flex space-x-4 justify-center items-center"
+              className="focus:outline-none px-4 py-2 bg-gray-200/80 hover:bg-gray-300 rounded-lg text-gray-800 font-medium w-full mb-4 flex space-x-4 justify-center items-center transition-colors ease-in"
             >
               <GoogleIcon />
               <span>Sign in with Google</span>
@@ -208,12 +190,12 @@ export default function Login() {
 
             <button
               onClick={handleGithubAuth}
-              className="focus:outline-none px-4 py-2 bg-blue-500/80 hover:bg-blue-500 rounded-lg text-white font-medium w-full mb-4 flex space-x-4 justify-center items-center"
+              className="focus:outline-none px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium w-full flex space-x-4 justify-center items-center transition-colors ease-in"
             >
               <GithubIcon />
               <span>Sign in with Github</span>
             </button>
-            <div className="w-full">
+            {/* <div className="w-full">
               <button
                 onClick={() => setIsLogin((prev) => !prev)}
                 className="focus:outline-none px-4 py-2 bg-gray-500/80 hover:bg-gray-500 rounded-lg text-white w-full"
@@ -222,11 +204,10 @@ export default function Login() {
                   ? 'Do not have an account? Signup'
                   : 'Already have an account? Signin'}
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>
-      {/* </GoogleOAuthProvider> */}
       <footer></footer>
     </>
   );
