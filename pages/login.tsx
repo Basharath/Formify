@@ -182,7 +182,7 @@ export default function Login() {
             </form>
             <button
               onClick={handleGoogleAuth}
-              className="focus:outline-none px-4 py-2 bg-gray-200/80 hover:bg-gray-300 rounded-lg text-gray-800 font-medium w-full mb-4 flex space-x-4 justify-center items-center transition-colors ease-in"
+              className="focus:outline-none px-4 py-2 bg-blue-200 hover:bg-blue-300/90 rounded-lg text-gray-800 font-medium w-full mb-4 flex space-x-4 justify-center items-center transition-colors ease-in"
             >
               <GoogleIcon />
               <span>Sign in with Google</span>
@@ -190,7 +190,7 @@ export default function Login() {
 
             <button
               onClick={handleGithubAuth}
-              className="focus:outline-none px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium w-full flex space-x-4 justify-center items-center transition-colors ease-in"
+              className="focus:outline-none px-4 py-2 bg-purple-300 hover:bg-purple-400/90 rounded-lg text-gray-800 font-medium w-full flex space-x-4 justify-center items-center transition-colors ease-in"
             >
               <GithubIcon />
               <span>Sign in with Github</span>
