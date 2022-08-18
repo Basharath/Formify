@@ -30,7 +30,7 @@ export default function Home() {
       <Header title="Formify" />
 
       <main className="bg-gray-50 overflow-hidden">
-        <div className="py-2 pt-10 max-w-[1200px] mx-auto">
+        <div className="py-2 pt-7 max-w-[1200px] mx-auto">
           <div className="flex justify-between items-center sm:container mx-3 px-2 md:px-8">
             <Link href="/">
               <a className="border-none select-none text-4xl">
@@ -105,11 +105,10 @@ export default function Home() {
               xmlns="http://www.w3.org/2000/svg"
               xmlnsXlink="http://www.w3.org/1999/xlink"
               style={{ margin: 'auto', zIndex: 1 }}
-              width="1491"
               height="249"
               preserveAspectRatio="xMidYMid"
               viewBox="0 0 1491 249"
-              className="absolute bottom-0"
+              className="absolute w-full md:w-[1491px] -bottom-24 md:-bottom-4 z-0"
             >
               <g transform="translate(745.5,124.5) scale(1,-1) translate(-745.5,-124.5)">
                 <linearGradient
