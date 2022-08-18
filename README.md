@@ -64,6 +64,16 @@ const App = () => {
 };
 ```
 
+## Video demo
+
+To see all the above instructions lively, check this demo video below.
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=ddXu8QpzpO8">
+    <img alt="FormEasy video demo" src="https://img.youtube.com/vi/ddXu8QpzpO8/0.jpg" width="480" height="360"  />
+  </a>
+</p>
+
 ## Tech stack used in formify
 
 - NextJS
