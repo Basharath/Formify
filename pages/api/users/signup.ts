@@ -12,53 +12,55 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
-    const { name, email, password } = req.body;
-    const data = {
-      name,
-      email,
-      password,
-    };
-    const { error } = validateUser(data);
-    if (error) return res.status(400).send(error.details[0].message);
-    try {
-      data.password = await bcrypt.hash(password, 12);
+  return res.send('Sorry! This end point is not supported!');
 
-      const result = await prisma.user.create({
-        data,
-      });
+  // if (req.method === 'POST') {
+  //   const { name, email, password } = req.body;
+  //   const data = {
+  //     name,
+  //     email,
+  //     password,
+  //   };
+  //   const { error } = validateUser(data);
+  //   if (error) return res.status(400).send(error.details[0].message);
+  //   try {
+  //     data.password = await bcrypt.hash(password, 12);
 
-      const token = generateToken(result);
+  //     const result = await prisma.user.create({
+  //       data,
+  //     });
 
-      res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
-      return res.status(201).send('Signed up successfully');
-    } catch (err) {
-      console.log('err', err);
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === 'P2002') {
-          return res.status(400).send('User exists already');
-        }
-      }
-      return res.status(500).send('Something went wrong');
-    }
-  }
+  //     const token = generateToken(result);
+
+  //     res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+  //     return res.status(201).send('Signed up successfully');
+  //   } catch (err) {
+  //     console.log('err', err);
+  //     if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  //       if (err.code === 'P2002') {
+  //         return res.status(400).send('User exists already');
+  //       }
+  //     }
+  //     return res.status(500).send('Something went wrong');
+  //   }
+  // }
 }
 
-interface UserType {
-  name: string;
-  email: string;
-  password: string;
-}
+// interface UserType {
+//   name: string;
+//   email: string;
+//   password: string;
+// }
 
-const validateUser = (user: UserType) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).max(50).label('Name'),
-    email: Joi.string().email().min(4).max(255).required().label('Email'),
-    password: Joi.string().min(8).max(15).required().label('Password'),
-  });
+// const validateUser = (user: UserType) => {
+//   const schema = Joi.object({
+//     name: Joi.string().min(3).max(50).label('Name'),
+//     email: Joi.string().email().min(4).max(255).required().label('Email'),
+//     password: Joi.string().min(8).max(15).required().label('Password'),
+//   });
 
-  return schema.validate(user);
-};
-function err(arg0: string, err: any) {
-  throw new Error('Function not implemented.');
-}
+//   return schema.validate(user);
+// };
+// function err(arg0: string, err: any) {
+//   throw new Error('Function not implemented.');
+// }

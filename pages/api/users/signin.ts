@@ -11,49 +11,50 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
-    const data = {
-      email,
-      password,
-    };
+  return res.send('Sorry! This end point is not supported!');
+  // if (req.method === 'POST') {
+  //   const { email, password } = req.body;
+  //   const data = {
+  //     email,
+  //     password,
+  //   };
 
-    const { error } = validateUser(data);
-    if (error) return res.status(400).send(error.details[0].message);
+  //   const { error } = validateUser(data);
+  //   if (error) return res.status(400).send(error.details[0].message);
 
-    try {
-      const user = await prisma.user.findUnique({
-        where: {
-          email,
-        },
-      });
-      if (!user) return res.status(404).send('Invalid email or password');
+  //   try {
+  //     const user = await prisma.user.findUnique({
+  //       where: {
+  //         email,
+  //       },
+  //     });
+  //     if (!user) return res.status(404).send('Invalid email or password');
 
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword)
-        return res.status(400).send('Invalid email or password');
+  //     const validPassword = await bcrypt.compare(password, user.password);
+  //     if (!validPassword)
+  //       return res.status(400).send('Invalid email or password');
 
-      const token = generateToken(user);
-      res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
+  //     const token = generateToken(user);
+  //     res.setHeader('Set-Cookie', serialize('token', token, cookieOptions));
 
-      return res.status(200).send('Signin successful');
-    } catch (err) {
-      console.error('err', err);
-      return res.status(500).send('Something went wrong');
-    }
-  }
+  //     return res.status(200).send('Signin successful');
+  //   } catch (err) {
+  //     console.error('err', err);
+  //     return res.status(500).send('Something went wrong');
+  //   }
+  // }
 }
 
-interface UserType {
-  email: string;
-  password: string;
-}
+// interface UserType {
+//   email: string;
+//   password: string;
+// }
 
-const validateUser = (user: UserType) => {
-  const schema = Joi.object({
-    email: Joi.string().email().min(4).max(255).required().label('Email'),
-    password: Joi.string().min(8).max(15).required().label('Password'),
-  });
+// const validateUser = (user: UserType) => {
+//   const schema = Joi.object({
+//     email: Joi.string().email().min(4).max(255).required().label('Email'),
+//     password: Joi.string().min(8).max(15).required().label('Password'),
+//   });
 
-  return schema.validate(user);
-};
+//   return schema.validate(user);
+// };
