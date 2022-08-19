@@ -23,6 +23,7 @@ import Router from 'next/router';
 import Image from 'next/image';
 import Header from '../components/Header';
 import ScriptModal from '../components/ScriptModal';
+import Link from 'next/link';
 
 interface DashboardProps {
   userForms: UserFormTypeWithId[];
@@ -192,14 +193,16 @@ function Dashboard({ userForms, user }: DashboardProps) {
       <main className="bg-purple-100 w-full h-screen overflow-hidden">
         <div className="p-4 pt-8 md:p-10 max-w-[1200px] mx-auto">
           <div className="bg-blue-200 p-4 rounded-xl flex justify-between items-center mb-8">
-            <div className="text-2xl md:text-4xl font-medium select-none">
-              <Image
-                src="/images/logo.svg"
-                width={119}
-                height={41}
-                alt="Formify logo"
-              />
-            </div>
+            <Link href="/">
+              <a className="text-2xl md:text-4xl font-medium select-none">
+                <Image
+                  src="/images/logo.svg"
+                  width={119}
+                  height={41}
+                  alt="Formify logo"
+                />
+              </a>
+            </Link>
             <div className="flex items-center space-x-4 md:space-x-8">
               <div className="font-medium">Hi, {user?.name}</div>
               <div>

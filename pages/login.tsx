@@ -22,6 +22,7 @@ import {
 } from 'firebase/auth';
 import { GithubIcon, GoogleIcon } from '../components/Icons';
 import { isMobile } from '../utils';
+import Link from 'next/link';
 
 export default function Login() {
   const [input, setInput] = useState({ email: '', password: '', name: '' });
@@ -138,17 +139,16 @@ export default function Login() {
         <div className="flex flex-col justify-center items-center ">
           <div className="p-6 custom-shadow rounded-lg mt-36 bg-white">
             <form className="flex flex-col items-center justify-center w-[300px] max-w-md">
-              {/* <h2 className="text-4xl mb-5">
-                  <span className="font-Charm text-black">f</span>ormify
-                </h2> */}
-              <div className="select-none mb-10">
-                <Image
-                  src="/images/logo.svg"
-                  width={150}
-                  height={54}
-                  alt="Formify logo"
-                />
-              </div>
+              <Link href="/">
+                <a className="select-none mb-10 block">
+                  <Image
+                    src="/images/logo.svg"
+                    width={150}
+                    height={54}
+                    alt="Formify logo"
+                  />
+                </a>
+              </Link>
               {/* {!isLogin && (
                 <Input
                   onChange={handleInput}
