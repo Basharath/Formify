@@ -14,14 +14,8 @@ const sendMail = async (to: string, html: string) => {
     from: `Formify <${process.env.EMAIL_ID}>`,
     to,
     subject: 'New submission using Formify',
-    // text: 'this is some text',
     html,
   };
-
-  // smtpTransport.sendMail(mailOptions, (err, info) => {
-  //   if (err) console.log('Something went wrong', err);
-  //   else console.log('Success', info);
-  // });
   return smtpTransport.sendMail(mailOptions);
 };
 

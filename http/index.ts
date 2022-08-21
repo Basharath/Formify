@@ -1,4 +1,4 @@
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 import {
   UserSigninType,
@@ -11,14 +11,6 @@ const baseURL = '/api';
 
 axios.defaults.withCredentials = true;
 const API = axios.create({ baseURL });
-
-let authToken = '';
-
-// API.interceptors.request.use((req: AxiosRequestHeaders) => {
-//   // @ts-nocheck
-//   req.headers.Authorization = authToken;
-//   return req;
-// });
 
 API.interceptors.response.use(
   (res) => res,
