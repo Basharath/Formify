@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { motion, useTransform, useScroll } from 'framer-motion';
 import MacWrap from '../components/MacWrap';
+import Demo from '../components/Demo';
 
 const rotateVariants = {
   outView: { opacity: 0, scale: 0.5 },
@@ -24,6 +25,9 @@ const rotateVariants = {
 export default function Home() {
   const { scrollYProgress } = useScroll();
   const rotate = useTransform(scrollYProgress, [0, 0.3], [30, 0]);
+  const [show, setShow] = useState(false);
+
+  const hideDemo = () => setShow(false);
 
   return (
     <>
@@ -84,13 +88,14 @@ export default function Home() {
                   site without writing single line of code
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-x-5 sm:space-y-0">
-                  <Link href="#explore">
-                    <a className="border-none text-black hover:text-gray-50">
-                      <button className="p-2.5 px-8  w-full md:w-auto rounded-full border border-blue-500 hover:bg-blue-500">
-                        🪄 Explore
-                      </button>
-                    </a>
-                  </Link>
+                  <div className="border-none text-black hover:text-gray-50">
+                    <button
+                      onClick={() => setShow(true)}
+                      className="p-2.5 px-8  w-full md:w-auto rounded-full border border-blue-500 hover:bg-blue-500"
+                    >
+                      🪄 Demo
+                    </button>
+                  </div>
                   <Link href="/login">
                     <a className="border-none text-black hover:text-gray-50">
                       <button className="p-2.5 px-8  w-full md:w-auto rounded-full border border-purple-500 hover:bg-purple-600">
@@ -104,13 +109,13 @@ export default function Home() {
             {/* Product hunt */}
             <div className="flex justify-center">
               <a
-                href="https://www.producthunt.com/posts/formify?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-formify"
+                href="https://www.producthunt.com/products/formify?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-formify"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="border-none shadow-md hover:shadow-lg overflow-hidden rounded-lg"
               >
                 <img
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=356112&theme=light"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=356112&theme=light&period=daily"
                   alt="Formify - Create&#0044;&#0032;manage&#0032;and&#0032;embed&#0032;forms&#0032;on&#0032;static&#0032;sites&#0032;with&#0032;no&#0032;code | Product Hunt"
                   style={{ width: 250, height: 54 }}
                   width="250"
@@ -220,6 +225,9 @@ export default function Home() {
           <Footer />
         </div>
       </main>
+
+      {/* Youtube demo */}
+      <Demo show={show} hide={hideDemo} />
     </>
   );
 }
