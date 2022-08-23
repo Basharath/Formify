@@ -22,6 +22,10 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://www.producthunt.com/products/formify?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-formify" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=356112&theme=light&period=daily" alt="Formify - Create&#0044;&#0032;manage&#0032;and&#0032;embed&#0032;forms&#0032;on&#0032;static&#0032;sites&#0032;with&#0032;no&#0032;code | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</p>
+
 Formify is an open source application that lets you create, manage and embed contact forms on any site without writing code.
 
 This project is done as a part of [PlanetScale](https://planetscale.com/) and [HashNode](https://hashnode.com/) hackathon.
