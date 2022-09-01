@@ -107,13 +107,25 @@ npm install
 PLANETSCALE_PRISMA_DATABASE_URL=mysql://<USERNAME>:<PLAIN_TEXT_PASSWORD>@<ACCESS_HOST_URL>/<DATABASE_NAME>?sslaccept=strict
 JWT_PRIVATE=<Secret key>
 SERVER=<URL of the site>
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=<Google auth client ID>
+EMAIL_ID=<Email ID for sending notifications>
+EMAIL_PASS=<Passsword for the above Email>
+
+# Firebase config variables
+NEXT_PUBLIC_APIKEY=
+NEXT_PUBLIC_AUTHDOMAIN=
+NEXT_PUBLIC_PROJECTID=
+NEXT_PUBLIC_STORAGEBUCKET=
+NEXT_PUBLIC_MESSAGINGSENDERID=
+NEXT_PUBLIC_APPID=
+FIREBASE_SERVICE_ACCOUNT_KEY=<Account key as a string>
 ```
 
 - To get `PLANETSCALE_PRISMA_DATABASE_URL` sign up and create a database on planetscale.com and get the connection URL for Prisma.
 - Put any secret text for `JWT_PRIVATE` which is used to sign JWT tokens
 - `SERVER` is the URL of the site you will be creating. This is used to give the location for the script source.
-- To get `NEXT_PUBLIC_GOOGLE_CLIENT_ID` visit [Google cloud credentials](https://console.cloud.google.com/apis/credentials) and create a new credentials for the website and get the client ID.
+- `EMAIL_ID` is the email using which the notification emails will be sent
+- `EMAIL_PASS` is the password for the above email
+- For social logins create a firebase project and get the config details
 
 4. After all the above environment variables are set, run the below command(s).
 
