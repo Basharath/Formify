@@ -28,8 +28,6 @@
 
 Formify is an open source application that lets you create, manage and embed contact forms on any site without writing code.
 
-This project is done as a part of [PlanetScale](https://planetscale.com/) and [HashNode](https://hashnode.com/) hackathon.
-
 ## How formify works?
 
 1. Visit [formify.vercel.app](https://formify.vercel.app)
