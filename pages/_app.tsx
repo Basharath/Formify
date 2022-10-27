@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import { Form } from 'formify-form';
+import { Analytics } from '@vercel/analytics/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [isMounted, setIsMounted] = useState(false);
@@ -44,6 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       )}
 
       <Component {...pageProps} />
+      <Analytics />
     </>
   );
 }
